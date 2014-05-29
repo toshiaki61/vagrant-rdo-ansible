@@ -1,0 +1,11 @@
+---
+- include: mysql-server.yml
+- include: messaging-server.yml
+- include: database.yml
+- include: keystone.yml
+- include: glance.yml
+- include: nova.yml
+- include: neutron.yml
+- include: network.yml
+- include: dashboard.yml
+- include: cinder.yml

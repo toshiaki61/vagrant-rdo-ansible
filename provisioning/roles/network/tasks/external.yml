@@ -1,0 +1,9 @@
+---
+- shell: cat /vagrant/provisioning/roles/network/files/bridge | sudo tee -a /etc/sysconfig/network-scripts/ifcfg-{{ interface_name }} && touch ~/.executed-external-1 creates=~/.executed-external-1
+  tags: external
+
+- shell: echo 'DEVICE={{ interface_name }}' | sudo tee -a /etc/sysconfig/network-scripts/ifcfg-{{ interface_name }} && touch ~/.executed-external-2 creates=~/.executed-external-2
+  tags: external
+
+- service: name=network state=restarted
+  tags: external

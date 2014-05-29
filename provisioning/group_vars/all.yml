@@ -1,0 +1,65 @@
+---
+#$(openssl rand -hex 10)
+
+# database password of identity service
+keystone_dbpass: pass
+# password of user demo
+demo_pass: pass
+# password of user admin
+admin_pass: pass
+# database password for image service
+glance_dbpass: pass
+# password of image service user glance
+glance_pass: pass
+# database password for compute service
+nova_dbpass: pass
+# password of compute service user nova
+nova_pass: pass
+# database password for the dashboard
+dash_dbpass: pass
+# database password for the block storage service
+cinder_dbpass: pass
+# password of block storage service user cinder
+cinder_pass: pass
+# database password for the networking service
+neutron_dbpass: pass
+# password of networking service user neutron
+neutron_pass: pass
+# database password for the orchestration service
+heat_dbpass: pass
+# password of orchestration service user heat
+heat_pass: pass
+# database password for the telemetry service
+ceilometer_dbpass: pass
+# password of telemetry service user ceilometer
+ceilometer_pass: pass
+# database password of database service
+trove_dbpass: pass
+# password of database service user trove
+trove_pass: pass
+
+root_dbpass: pass
+
+admin_token: admin
+
+admin_email: admin@localhost
+demo_email: demo@localhost
+
+service_token:
+  OS_SERVICE_TOKEN: "{{ admin_token }}"
+  OS_SERVICE_ENDPOINT: http://controller:35357/v2.0
+
+admin_openrc:
+  OS_USERNAME: admin
+  OS_PASSWORD: "{{ admin_pass }}"
+  OS_TENANT_NAME: admin
+  OS_AUTH_URL: http://controller:35357/v2.0
+
+demo_openrc:
+  OS_USERNAME: demo
+  OS_PASSWORD: "{{ demo_pass }}"
+  OS_TENANT_NAME: demo
+  OS_AUTH_URL: http://controller:35357/v2.0
+
+metadata_secret: meta
+

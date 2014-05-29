@@ -1,0 +1,5 @@
+---
+- hosts: network-node
+  sudo: yes
+  roles:
+    - ../roles/network

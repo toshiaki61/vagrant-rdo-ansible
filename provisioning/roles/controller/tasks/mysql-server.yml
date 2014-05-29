@@ -1,0 +1,15 @@
+---
+- name: be sure mysql-server packages are installed
+  yum: name={{ item }} state=installed
+  with_items:
+    - mysql
+    - mysql-server
+  tags: mysql-server
+
+- name: configuration
+  shell: cat /vagrant/provisioning/roles/controller/files/my.cnf | sudo tee -a /etc/my.cnf && touch ~/.executed-mysql-server-1 creates=~/.executed-mysql-server-1
+  tags: mysql-server
+
+- name: be sure mysqld is running and enabled
+  service: name=mysqld state=running enabled=yes
+  tags: mysql-server

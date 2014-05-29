@@ -1,0 +1,6 @@
+---
+- include: hosts.yml
+- include: japanese.yml
+- include: ntp.yml
+- include: mysql-client.yml
+- include: openstack.yml

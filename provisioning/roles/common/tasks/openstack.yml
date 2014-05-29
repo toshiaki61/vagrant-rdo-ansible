@@ -1,0 +1,20 @@
+---
+- name: install the openstack-icehouse rpm from a remote repo
+  yum: name=http://repos.fedorapeople.org/repos/openstack/openstack-icehouse/rdo-release-icehouse-3.noarch.rpm state=present
+  tags: openstack
+
+- name: install the epel-release-6-8 rpm from a remote repo
+  yum: name=http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm state=present
+  tags: openstack
+
+- name: be sure openstack packages are installed
+  yum: name={{ item }} state=installed
+  with_items:
+    - openstack-utils
+    - openstack-selinux
+    - python-keystoneclient
+  tags: openstack
+
+- name: upgrade all packages
+  yum: name=* state=latest
+  tags: openstack

@@ -1,0 +1,41 @@
+---
+- shell: mkdir -p /etc/swift && touch ~/.executed-swift-storage-1 creates=~/.executed-swift-storage-1
+  tags: swift
+- shell: cat /vagrant/provisioning/roles/storage/files/swift.conf | sudo tee /etc/swift/swift.conf && touch ~/.executed-swift-storage-2 creates=~/.executed-swift-storage-2
+  tags: swift
+
+- yum: name={{ item }} state=installed
+  with_items:
+    - openstack-swift-account
+    - openstack-swift-container
+    - openstack-swift-object
+    - xfsprogs
+    - xinetd
+  tags: swift
+
+- shell: fdisk /dev/sdb && touch ~/.executed-swift-storage-3 creates=~/.executed-swift-storage-3
+  tags: swift
+- shell: mkfs.xfs /dev/sdb1 && touch ~/.executed-swift-storage-4 creates=~/.executed-swift-storage-4
+  tags: swift
+- shell: echo "/dev/sdb1 /srv/node/sdb1 xfs noatime,nodiratime,nobarrier,logbufs= 8 0 0" | sudo tee -a /etc/fstab && touch ~/.executed-swift-storage-5 creates=~/.executed-swift-storage-5
+  tags: swift
+- shell: mkdir -p /srv/node/sdb1 && touch ~/.executed-swift-storage-6 creates=~/.executed-swift-storage-6
+  tags: swift
+- shell: mount /srv/node/sdb1 && touch ~/.executed-swift-storage-7 creates=~/.executed-swift-storage-7
+  tags: swift
+- shell: chown -R swift:swift /srv/node && touch ~/.executed-swift-storage-8 creates=~/.executed-swift-storage-8
+  tags: swift
+
+- shell: cat /vagrant/provisioning/roles/storage/files/rsyncd.conf | sed 's/STORAGE_LOCAL_NET_IP/{{ STORAGE_LOCAL_NET_IP }}/g' | sudo tee /etc/rsyncd.conf && touch ~/.executed-swift-storage-9 creates=~/.executed-swift-storage-9
+  tags: swift
+
+- shell: sed -i 's/disable.*/disable = false/g' /etc/xinetd.d/rsync && touch ~/.executed-swift-storage-10 creates=~/.executed-swift-storage-10
+  tags: swift
+
+- service: name=xinetd state=running enabled=yes
+  tags: swift
+
+- shell: mkdir -p /var/swift/recon && touch ~/.executed-swift-storage-11 creates=~/.executed-swift-storage-11
+  tags: swift
+- shell: chown -R swift:swift /var/swift/recon && touch ~/.executed-swift-storage-12 creates=~/.executed-swift-storage-12
+  tags: swift

@@ -1,0 +1,3 @@
+TYPE=Ethernet
+ONBOOT="yes"
+BOOTPROTO="none"

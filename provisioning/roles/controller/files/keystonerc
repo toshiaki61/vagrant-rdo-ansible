@@ -1,0 +1,5 @@
+export OS_USERNAME=KS_USERNAME
+export OS_PASSWORD=KS_PASSWORD
+export OS_TENANT_NAME=KS_USERNAME
+export OS_AUTH_URL=http://controller:35357/v2.0
+export PS1='[\u@\h \W(keystone_KS_USERNAME)]\$ '

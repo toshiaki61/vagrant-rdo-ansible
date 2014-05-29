@@ -1,0 +1,11 @@
+---
+shell: keystone user-create --name=swift --pass={{ swift_pass }} --email=swift@example.com && touch ~/.executed-swift-1 creates=~/.executed-swift-1
+environment: admin_openrc
+shell: keystone user-role-add --user=swift --tenant=service --role=admin && touch ~/.executed-swift-2 creates=~/.executed-swift-2
+environment: admin_openrc
+
+shell: keystone service-create --name=swift --type=object-store --description="OpenStack Object Storage" && touch ~/.executed-swift-3 creates=~/.executed-swift-3
+environment: admin_openrc
+shell: keystone endpoint-create --service-id=$(keystone service-list | awk '/ object-store / {print $2}') --publicurl='http://controller:8080/v1/AUTH_%(tenant_id)s' --internalurl='http://controller:8080/v1/AUTH_%(tenant_id)s' --adminurl=http://controller:8080 && touch ~/.executed-swift-4 creates=~/.executed-swift-4
+environment: admin_openrc
+

@@ -1,0 +1,106 @@
+---
+- name: be sure keystone packages are installed
+  yum: name={{ item }} state=installed
+  with_items:
+    - openstack-keystone
+  tags: keystone
+
+- name: configure database connection
+  shell: openstack-config --set /etc/keystone/keystone.conf database connection mysql://keystone:{{ keystone_dbpass }}@controller/keystone && touch ~/.executed-keystone-controller-1.1 creates=~/.executed-keystone-controller-1.1
+  tags: keystone
+
+- name: configure sql connection
+  shell: openstack-config --set /etc/keystone/keystone.conf sql connection mysql://keystone:{{ keystone_dbpass }}@controller/keystone && touch ~/.executed-keystone-controller-1.2 creates=~/.executed-keystone-controller-1.2
+  tags: keystone
+
+- name: keystone db_sync
+  shell: keystone-manage db_sync && touch ~/.executed-keystone-controller-2 creates=~/.executed-keystone-controller-2
+  tags: keystone
+
+- name: configure admin_token
+  shell: openstack-config --set /etc/keystone/keystone.conf DEFAULT admin_token {{ admin_token }} && touch ~/.executed-keystone-controller-3 creates=~/.executed-keystone-controller-3
+  tags: keystone
+
+- name: configure pki_setup
+  shell: keystone-manage pki_setup --keystone-user keystone --keystone-group keystone && touch ~/.executed-keystone-controller-4 creates=~/.executed-keystone-controller-4
+  tags: keystone
+
+- name: chown ssl
+  shell: chown -R keystone:keystone /etc/keystone/ssl && touch ~/.executed-keystone-controller-5 creates=~/.executed-keystone-controller-5
+  tags: keystone
+
+- name: chown log
+  shell: chown -R keystone:keystone /var/log/keystone && touch ~/.executed-keystone-controller-6 creates=~/.executed-keystone-controller-6
+  tags: keystone
+
+- name: chmod
+  shell: chmod -R o-rwx /etc/keystone/ssl && touch ~/.executed-keystone-controller-7 creates=~/.executed-keystone-controller-7
+  tags: keystone
+
+- name: start keystone
+  service: name=openstack-keystone state=running enabled=yes
+  tags: keystone
+
+- name: setup crontab
+  shell: (sudo crontab -l 2>&1 | grep -q token_flush) || echo '@hourly /usr/bin/keystone-manage token_flush >/var/log/keystone/ keystone-tokenflush.log 2>&1' | sudo tee -a /var/spool/cron/root && touch ~/.executed-keystone-controller-8 creates=~/.executed-keystone-controller-8
+  tags: keystone
+
+- name: create admin user
+  shell: keystone user-create --name=admin --pass={{ admin_pass }} --email={{ admin_email }} && touch ~/.executed-keystone-controller-9 creates=~/.executed-keystone-controller-9
+  environment: service_token
+  tags: keystone
+
+- name: create admin role
+  shell: keystone role-create --name=admin && touch ~/.executed-keystone-controller-10 creates=~/.executed-keystone-controller-10
+  environment: service_token
+  tags: keystone
+
+- name: create admin tenant
+  shell: keystone tenant-create --name=admin --description="Admin Tenant" && touch ~/.executed-keystone-controller-11 creates=~/.executed-keystone-controller-11
+  environment: service_token
+  tags: keystone
+
+- name: add role admin to admin
+  shell: keystone user-role-add --user=admin --tenant=admin --role=admin && touch ~/.executed-keystone-controller-12 creates=~/.executed-keystone-controller-12
+  environment: service_token
+  tags: keystone
+
+- name: add role admin to _member_
+  shell: keystone user-role-add --user=admin --role=_member_ --tenant=admin && touch ~/.executed-keystone-controller-13 creates=~/.executed-keystone-controller-13
+  environment: service_token
+  tags: keystone
+
+- name: create demo user
+  shell: keystone user-create --name=demo --pass={{ demo_pass }} --email={{ demo_email }} && touch ~/.executed-keystone-controller-14 creates=~/.executed-keystone-controller-14
+  environment: service_token
+  tags: keystone
+
+- name: create demo tenant
+  shell: keystone tenant-create --name=demo --description="Demo Tenant" && touch ~/.executed-keystone-controller-15 creates=~/.executed-keystone-controller-15
+  environment: service_token
+  tags: keystone
+
+- name: add role demo to _member_
+  shell: keystone user-role-add --user=demo --role=_member_ --tenant=demo && touch ~/.executed-keystone-controller-16 creates=~/.executed-keystone-controller-16
+  environment: service_token
+  tags: keystone
+
+- name: create service tenant
+  shell: keystone tenant-create --name=service --description="Service Tenant" && touch ~/.executed-keystone-controller-17 creates=~/.executed-keystone-controller-17
+  environment: service_token
+  tags: keystone
+
+- name: create keystone service
+  shell: keystone service-create --name=keystone --type=identity --description="OpenStack Identity" && touch ~/.executed-keystone-controller-18 creates=~/.executed-keystone-controller-18
+  environment: service_token
+  tags: keystone
+
+- name: create keystone endpoint
+  shell: keystone endpoint-create --service-id=$(keystone service-list | awk '/ identity / {print $2}') --publicurl=http://controller:5000/v2.0 --internalurl=http://controller:5000/v2.0 --adminurl=http://controller:35357/v2.0 && touch ~/.executed-keystone-controller-19 creates=~/.executed-keystone-controller-19
+  environment: service_token
+  tags: keystone
+
+- shell: cat /vagrant/provisioning/roles/controller/files/keystonerc | sed 's/KS_USERNAME/admin/g' | sed 's/KS_PASSWORD/{{ admin_pass }}/g' | sudo tee keystonerc_admin && touch ~/.executed-keystone-controller-20 creates=~/.executed-keystone-controller-20
+  tags: keystone
+- shell: cat /vagrant/provisioning/roles/controller/files/keystonerc | sed 's/KS_USERNAME/demo/g' | sed 's/KS_PASSWORD/{{ demo_pass }}/g' | sudo tee keystonerc_demo && touch ~/.executed-keystone-controller-21 creates=~/.executed-keystone-controller-21
+  tags: keystone

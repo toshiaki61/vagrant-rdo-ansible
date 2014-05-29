@@ -1,0 +1,7 @@
+LANGUAGE_CODE = 'ja'
+import locale
+LOCALE = locale.setlocale(locale.LC_ALL, 'ja_JP.UTF-8')
+USE_I18N = True
+USE_L10N = True
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'

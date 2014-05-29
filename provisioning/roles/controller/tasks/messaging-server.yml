@@ -1,0 +1,16 @@
+---
+- name: install qpid-cpp-server
+  yum: name=qpid-cpp-server state=present
+  tags: messaging-server
+
+- name: setup qpidd comment out
+  shell: sed -i 's/^auth=/#auth=/g' /etc/qpidd.conf && touch ~/.executed-messaging-server-1 creates=~/.executed-messaging-server-1
+  tags: messaging-server
+
+- name: qpidd auth=no
+  shell: echo 'auth=no' | sudo tee -a /etc/qpidd.conf && touch ~/.executed-messaging-server-2 creates=~/.executed-messaging-server-2
+  tags: messaging-server
+
+- name: qpidd start
+  service: name=qpidd state=running enabled=yes
+  tags: messaging-server
