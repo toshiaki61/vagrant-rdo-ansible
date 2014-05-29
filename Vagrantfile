@@ -26,6 +26,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define "controller" do |box|
     box.vm.hostname = "controller"
     box.vm.network :private_network, ip: "10.0.0.11", :netmask => "255.255.255.0"
+    box.vm.network :forwarded_port, guest: 80, host: 80
+    box.vm.network :forwarded_port, guest: 443, host: 443
     box.vm.provider :virtualbox do |vbox|
       vbox.customize ["modifyvm", :id, "--memory", "2048"]
       
