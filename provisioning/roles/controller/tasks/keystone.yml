@@ -42,7 +42,7 @@
   tags: keystone
 
 - name: setup crontab
-  shell: (sudo crontab -l 2>&1 | grep -q token_flush) || echo '@hourly /usr/bin/keystone-manage token_flush >/var/log/keystone/ keystone-tokenflush.log 2>&1' | sudo tee -a /var/spool/cron/root && touch ~/.executed-keystone-controller-8 creates=~/.executed-keystone-controller-8
+  shell: (sudo crontab -l 2>&1 | grep -q token_flush) || echo '@hourly /usr/bin/keystone-manage token_flush >/var/log/keystone/keystone-tokenflush.log 2>&1' | sudo tee -a /var/spool/cron/root && touch ~/.executed-keystone-controller-8 creates=~/.executed-keystone-controller-8
   tags: keystone
 
 - name: create admin user
