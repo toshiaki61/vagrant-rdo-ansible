@@ -93,8 +93,8 @@
 - service: name=openstack-glance-registry state=running enabled=yes
   tags: glance
 
-# - get_url: url="http://cdn.download.cirros-cloud.net/0.3.2/cirros-0.3.2-x86_64-disk.img" dest=/vagrant/tmp
-#   tags: glance
+- get_url: url="http://cdn.download.cirros-cloud.net/0.3.2/cirros-0.3.2-x86_64-disk.img" dest=/vagrant/tmp
+  tags: glance
 
 - shell: glance image-create --name "cirros-0.3.2-x86_64" --disk-format qcow2 --container-format bare --is-public True --progress < /vagrant/tmp/cirros-0.3.2-x86_64-disk.img && touch ~/.executed-glance-27 creates=~/.executed-glance-27
   environment: admin_openrc
