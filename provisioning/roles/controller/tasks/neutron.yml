@@ -51,6 +51,7 @@
 - shell: openstack-config --set /etc/neutron/neutron.conf DEFAULT nova_admin_username nova && touch ~/.executed-neutron-19 creates=~/.executed-neutron-19
   tags: neutron
 - shell: openstack-config --set /etc/neutron/neutron.conf DEFAULT nova_admin_tenant_id $(keystone tenant-list | awk '/ service / { print $2 }') && touch ~/.executed-neutron-20 creates=~/.executed-neutron-20
+  environment: admin_openrc
   tags: neutron
 - shell: openstack-config --set /etc/neutron/neutron.conf DEFAULT nova_admin_password {{ nova_pass }} && touch ~/.executed-neutron-21 creates=~/.executed-neutron-21
   tags: neutron
