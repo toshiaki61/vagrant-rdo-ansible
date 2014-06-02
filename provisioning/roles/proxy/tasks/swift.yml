@@ -7,8 +7,8 @@
     - python-keystone-auth-token
   tags: swift-proxy
 
-- shell: sed -i 's/OPTIONS=.*/OPTIONS="-l {{ PROXY_LOCAL_NET_IP }}"/g' /etc/sysconfig/memcached && touch ~/.executed-swift-proxy-01 creates=~/.executed-swift-proxy-01
-  tags: swift-proxy
+# - shell: sed -i 's/OPTIONS=.*/OPTIONS="-l {{ PROXY_LOCAL_NET_IP }}"/g' /etc/sysconfig/memcached && touch ~/.executed-swift-proxy-01 creates=~/.executed-swift-proxy-01
+#   tags: swift-proxy
 
 - service: name=memcached state=running enabled=yes
   tags: swift-proxy
@@ -42,6 +42,9 @@
   tags: swift-proxy
 
 - shell: chown -R swift:swift /etc/swift && touch ~/.executed-swift-proxy-14 creates=~/.executed-swift-proxy-14
+  tags: swift-proxy
+
+- shell: sed -i 's/^bind_ip =.*/bind_ip = 0.0.0.0/g' /etc/swift/account-server.conf && touch ~/.executed-swift-proxy-15 creates=~/.executed-swift-proxy-15
   tags: swift-proxy
 
 
