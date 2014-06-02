@@ -1,2 +1,4 @@
 .vagrant
 
+tmp/cirros-0.3.2-x86_64-disk.img
+tmp/controller.vdi
