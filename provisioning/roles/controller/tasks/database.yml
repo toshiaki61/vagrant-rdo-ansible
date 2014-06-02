@@ -8,6 +8,7 @@
     - neutron
     - dash
     - cinder
+    - heat
   tags: database
 
 - name: Create database user keystone
@@ -80,6 +81,19 @@
     name=cinder
     password="{{ cinder_dbpass }}"
     priv=cinder.*:ALL
+    host={{ item }}
+    state=present
+  with_items:
+    - "%"
+    - localhost
+    - controller
+  tags: database
+
+- name: Create database user heat
+  mysql_user: >
+    name=heat
+    password="{{ heat_dbpass }}"
+    priv=heat.*:ALL
     host={{ item }}
     state=present
   with_items:

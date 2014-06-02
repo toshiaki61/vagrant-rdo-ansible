@@ -25,3 +25,5 @@
         - openstack-swift-account-reaper
         - openstack-swift-account-auditor
       tags: swift-storage
+
+- include: playbooks/orchestration.yml

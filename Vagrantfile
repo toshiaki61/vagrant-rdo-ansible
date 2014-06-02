@@ -89,8 +89,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         "controller",
       ],
       "proxy-node" => [
-        "controller"
-      ]
+        "controller",
+      ],
+      "orchestration-node" => [
+        "controller",
+      ],
+      "telemetry-node" => [
+        "controller",
+      ],
     }
   end
 end

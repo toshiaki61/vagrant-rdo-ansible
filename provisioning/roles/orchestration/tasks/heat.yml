@@ -1,0 +1,66 @@
+---
+- yum: name={{ item }} state=installed
+  with_items:
+    - openstack-heat-api
+    - openstack-heat-engine
+    - openstack-heat-api-cfn
+  tags: heat
+
+- shell: openstack-config --set /etc/heat/heat.conf database connection mysql://heat:{{ heat_dbpass }}@controller/heat && touch ~/.executed-heat-01 creates=~/.executed-heat-01
+  tags: heat
+
+- shell: heat-manage db_sync && touch ~/.executed-heat-02 creates=~/.executed-heat-02
+  tags: heat
+
+- shell: keystone user-create --name=heat --pass={{ heat_pass }} --email=heat@example.com && touch ~/.executed-heat-03 creates=~/.executed-heat-03
+  environment: admin_openrc
+  tags: heat
+- shell: keystone user-role-add --user=heat --tenant=service --role=admin && touch ~/.executed-heat-04 creates=~/.executed-heat-04
+  environment: admin_openrc
+  tags: heat
+
+- shell: openstack-config --set /etc/heat/heat.conf keystone_authtoken auth_host controller && touch ~/.executed-heat-041 creates=~/.executed-heat-041
+  tags: heat
+- shell: openstack-config --set /etc/heat/heat.conf keystone_authtoken auth_port 35357 && touch ~/.executed-heat-042 creates=~/.executed-heat-042
+  tags: heat
+- shell: openstack-config --set /etc/heat/heat.conf keystone_authtoken auth_protocol http && touch ~/.executed-heat-043 creates=~/.executed-heat-043
+  tags: heat
+- shell: openstack-config --set /etc/heat/heat.conf keystone_authtoken auth_uri http://controller:5000/v2.0 && touch ~/.executed-heat-044 creates=~/.executed-heat-044
+  tags: heat
+- shell: openstack-config --set /etc/heat/heat.conf keystone_authtoken admin_tenant_name service && touch ~/.executed-heat-045 creates=~/.executed-heat-045
+  tags: heat
+- shell: openstack-config --set /etc/heat/heat.conf keystone_authtoken admin_user heat && touch ~/.executed-heat-046 creates=~/.executed-heat-046
+  tags: heat
+- shell: openstack-config --set /etc/heat/heat.conf keystone_authtoken admin_password {{ heat_pass }} && touch ~/.executed-heat-047 creates=~/.executed-heat-047
+  tags: heat
+- shell: openstack-config --set /etc/heat/heat.conf ec2authtoken auth_uri http://controller:5000/v2.0 && touch ~/.executed-heat-048 creates=~/.executed-heat-048
+  tags: heat
+
+- shell: keystone service-create --name=heat --type=orchestration --description="Orchestration" && touch ~/.executed-heat-05 creates=~/.executed-heat-05
+  environment: admin_openrc
+  tags: heat
+- shell: keystone endpoint-create --service-id=$(keystone service-list | awk '/ orchestration / {print $2}') --publicurl=http://controller:8004/v1/%\(tenant_id\)s --internalurl=http://controller:8004/v1/%\(tenant_id\)s --adminurl=http://controller:8004/v1/%\(tenant_id\)s && touch ~/.executed-heat-06 creates=~/.executed-heat-06
+  environment: admin_openrc
+  tags: heat
+- shell: keystone service-create --name=heat-cfn --type=cloudformation --description="Orchestration CloudFormation" && touch ~/.executed-heat-07 creates=~/.executed-heat-07
+  environment: admin_openrc
+  tags: heat
+- shell: keystone endpoint-create --service-id=$(keystone service-list | awk '/ cloudformation / {print $2}') --publicurl=http://controller:8000/v1 --internalurl=http://controller:8000/v1 --adminurl=http://controller:8000/v1 && touch ~/.executed-heat-08 creates=~/.executed-heat-08
+  environment: admin_openrc
+  tags: heat
+
+- shell: keystone role-create --name heat_stack_user && touch ~/.executed-heat-09 creates=~/.executed-heat-09
+  environment: admin_openrc
+  tags: heat
+
+- shell: openstack-config --set /etc/heat/heat.conf DEFAULT heat_metadata_server_url http://10.0.0.11:8000 && touch ~/.executed-heat-10 creates=~/.executed-heat-10
+  tags: heat
+- shell: openstack-config --set /etc/heat/heat.conf DEFAULT heat_waitcondition_server_url http://10.0.0.11:8000/v1/waitcondition && touch ~/.executed-heat-11 creates=~/.executed-heat-11
+  tags: heat
+
+- service: name={{ item }} state=running enabled=yes
+  with_items: 
+    - openstack-heat-api
+    - openstack-heat-api-cfn
+    - openstack-heat-engine
+  tags: heat
