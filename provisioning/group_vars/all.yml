@@ -38,6 +38,8 @@ trove_dbpass: pass
 # password of database service user trove
 trove_pass: pass
 
+swift_pass: pass
+
 root_dbpass: pass
 
 admin_token: admin

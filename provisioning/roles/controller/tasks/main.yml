@@ -9,3 +9,4 @@
 - include: network.yml
 - include: dashboard.yml
 - include: cinder.yml
+- include: swift.yml
