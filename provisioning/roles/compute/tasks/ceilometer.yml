@@ -6,31 +6,47 @@
     - python-pecan
   tags: ceilometer-compute
 
-- shell: openstack-config --set /etc/nova/nova.conf DEFAULT instance_usage_audit True
-- shell: openstack-config --set /etc/nova/nova.conf DEFAULT instance_usage_audit_period hour
-- shell: openstack-config --set /etc/nova/nova.conf DEFAULT notify_on_state_change vm_and_task_state
+- shell: openstack-config --set /etc/nova/nova.conf DEFAULT instance_usage_audit True && touch ~/.executed-ceilometer-compute-01 creates=~/.executed-ceilometer-compute-01
+  tags: ceilometer-compute
+- shell: openstack-config --set /etc/nova/nova.conf DEFAULT instance_usage_audit_period hour && touch ~/.executed-ceilometer-compute-02 creates=~/.executed-ceilometer-compute-02
+  tags: ceilometer-compute
+- shell: openstack-config --set /etc/nova/nova.conf DEFAULT notify_on_state_change vm_and_task_state && touch ~/.executed-ceilometer-compute-03 creates=~/.executed-ceilometer-compute-03
+  tags: ceilometer-compute
 
-#section:
-#Edit the /etc/nova/nova.conf file and add the following lines to the [DEFAULT]
-#[DEFAULT]
-#...
-#notification_driver = nova.openstack.common.notifier.rpc_notifier
-#notification_driver = ceilometer.compute.nova_notifier
-#- shell: openstack-config --set /etc/nova/nova.conf DEFAULT auth_host controller
-#- shell: openstack-config --set /etc/nova/nova.conf DEFAULT auth_host controller
+- shell: sed -i 's/#notification_driver=.*/notification_driver = nova.openstack.common.notifier.rpc_notifier\n#notification_driver = ceilometer.compute.nova_notifier/g' /etc/nova/nova.conf && touch ~/.executed-ceilometer-compute-04 creates=~/.executed-ceilometer-compute-04
+  tags: ceilometer-compute
 
-# service openstack-nova-compute restart
+- service: name={{ item }} state=restarted
+  with_items:
+    - openstack-nova-compute
+  tags: ceilometer-compute
 
-- shell: openstack-config --set /etc/ceilometer/ceilometer.conf publisher metering_secret {{ CEILOMETER_TOKEN }}
+- shell: openstack-config --set /etc/ceilometer/ceilometer.conf publisher metering_secret {{ CEILOMETER_TOKEN }} && touch ~/.executed-ceilometer-compute-05 creates=~/.executed-ceilometer-compute-05
+  tags: ceilometer-compute
 
-- shell: openstack-config --set /etc/ceilometer/ceilometer.conf DEFAULT qpid_hostname controller
+- shell: openstack-config --set /etc/ceilometer/ceilometer.conf DEFAULT qpid_hostname controller && touch ~/.executed-ceilometer-compute-06 creates=~/.executed-ceilometer-compute-06
+  tags: ceilometer-compute
 
-- shell: openstack-config --set /etc/ceilometer/ceilometer.conf keystone_authtoken auth_host controller
-- shell: openstack-config --set /etc/ceilometer/ceilometer.conf keystone_authtoken admin_user ceilometer
-- shell: openstack-config --set /etc/ceilometer/ceilometer.conf keystone_authtoken admin_tenant_name service
-- shell: openstack-config --set /etc/ceilometer/ceilometer.conf keystone_authtoken auth_protocol http
-- shell: openstack-config --set /etc/ceilometer/ceilometer.conf keystone_authtoken admin_password {{ CEILOMETER_PASS }}
-- shell: openstack-config --set /etc/ceilometer/ceilometer.conf service_credentials os_username ceilometer
-- shell: openstack-config --set /etc/ceilometer/ceilometer.conf service_credentials os_tenant_name service
-- shell: openstack-config --set /etc/ceilometer/ceilometer.conf service_credentials os_password {{ CEILOMETER_PASS }}
-- shell: openstack-config --set /etc/ceilometer/ceilometer.conf service_credentials os_auth_url http://controller:5000/v2.0
+- shell: openstack-config --set /etc/ceilometer/ceilometer.conf keystone_authtoken auth_host controller && touch ~/.executed-ceilometer-compute-07 creates=~/.executed-ceilometer-compute-07
+  tags: ceilometer-compute
+- shell: openstack-config --set /etc/ceilometer/ceilometer.conf keystone_authtoken admin_user ceilometer && touch ~/.executed-ceilometer-compute-08 creates=~/.executed-ceilometer-compute-08
+  tags: ceilometer-compute
+- shell: openstack-config --set /etc/ceilometer/ceilometer.conf keystone_authtoken admin_tenant_name service && touch ~/.executed-ceilometer-compute-09 creates=~/.executed-ceilometer-compute-09
+  tags: ceilometer-compute
+- shell: openstack-config --set /etc/ceilometer/ceilometer.conf keystone_authtoken auth_protocol http && touch ~/.executed-ceilometer-compute-10 creates=~/.executed-ceilometer-compute-10
+  tags: ceilometer-compute
+- shell: openstack-config --set /etc/ceilometer/ceilometer.conf keystone_authtoken admin_password {{ ceilometer_pass }} && touch ~/.executed-ceilometer-compute-11 creates=~/.executed-ceilometer-compute-11
+  tags: ceilometer-compute
+- shell: openstack-config --set /etc/ceilometer/ceilometer.conf service_credentials os_username ceilometer && touch ~/.executed-ceilometer-compute-12 creates=~/.executed-ceilometer-compute-12
+  tags: ceilometer-compute
+- shell: openstack-config --set /etc/ceilometer/ceilometer.conf service_credentials os_tenant_name service && touch ~/.executed-ceilometer-compute-13 creates=~/.executed-ceilometer-compute-13
+  tags: ceilometer-compute
+- shell: openstack-config --set /etc/ceilometer/ceilometer.conf service_credentials os_password {{ ceilometer_pass }} && touch ~/.executed-ceilometer-compute-14 creates=~/.executed-ceilometer-compute-14
+  tags: ceilometer-compute
+- shell: openstack-config --set /etc/ceilometer/ceilometer.conf service_credentials os_auth_url http://controller:5000/v2.0 && touch ~/.executed-ceilometer-compute-15 creates=~/.executed-ceilometer-compute-15
+  tags: ceilometer-compute
+
+- service: name={{ item }} state=running enabled=yes
+  with_items: 
+    - openstack-ceilometer-compute
+  tags: ceilometer-compute

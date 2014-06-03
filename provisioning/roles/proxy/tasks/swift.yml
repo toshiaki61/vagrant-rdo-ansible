@@ -16,6 +16,12 @@
 - shell: cat /vagrant/provisioning/roles/proxy/files/proxy-server.conf | sed 's/SWIFT_PASS/{{ swift_pass }}/g' | sudo tee /etc/swift/proxy-server.conf && touch ~/.executed-swift-proxy-02 creates=~/.executed-swift-proxy-02
   tags: swift-proxy
 
+- shell: openstack-config --set /etc/swift/proxy-server.conf filter:ceilometer use egg:ceilometer#swift && touch ~/.executed-ceilometer-storage-03 creates=~/.executed-ceilometer-storage-03
+  tags: ceilometer-storage
+
+- shell: sed -i 's/pipeline =.*/pipeline = healthcheck cache authtoken keystoneauth ceilometer proxy-server/g' /etc/swift/proxy-server.conf && touch ~/.executed-ceilometer-storage-04 creates=~/.executed-ceilometer-storage-04
+  tags: ceilometer-storage
+
 - shell: mkdir -p /etc/swift/keystone-signing && chown -R swift:swift /etc/swift/keystone-signing && touch ~/.executed-swift-proxy-03 creates=~/.executed-swift-proxy-03
   tags: swift-proxy
 - shell: swift-ring-builder account.builder create 18 3 1 && swift-ring-builder container.builder create 18 3 1 && swift-ring-builder object.builder create 18 3 1 && touch ~/.executed-swift-proxy-04 creates=~/.executed-swift-proxy-04 chdir=/etc/swift

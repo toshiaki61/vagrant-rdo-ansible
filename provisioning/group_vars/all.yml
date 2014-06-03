@@ -65,3 +65,4 @@ demo_openrc:
 
 metadata_secret: meta
 
+CEILOMETER_TOKEN: fc1ff2f3620bc3fa8b7a

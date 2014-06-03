@@ -1,2 +1,3 @@
 ---
 - include: cinder.yml
+- include: ceilometer.yml

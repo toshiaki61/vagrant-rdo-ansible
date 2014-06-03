@@ -1,0 +1,16 @@
+---
+- shell: openstack-config --set /etc/cinder/cinder.conf DEFAULT control_exchange cinder && touch ~/.executed-ceilometer-block-01 creates=~/.executed-ceilometer-block-01
+  tags: ceilometer-block
+- shell: openstack-config --set /etc/cinder/cinder.conf DEFAULT notification_driver cinder.openstack.common.notifier.rpc_notifier && touch ~/.executed-ceilometer-block-02 creates=~/.executed-ceilometer-block-02
+  tags: ceilometer-block
+
+- service: name={{ item }} state=restarted
+  with_items:
+    - openstack-cinder-api
+    - openstack-cinder-scheduler
+  tags: ceilometer-block
+
+- service: name={{ item }} state=restarted
+  with_items:
+    - openstack-cinder-volume
+  tags: ceilometer-block

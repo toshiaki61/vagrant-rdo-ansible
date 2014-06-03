@@ -1,2 +1,3 @@
 ---
 - include: swift.yml
+- include: ceilometer.yml

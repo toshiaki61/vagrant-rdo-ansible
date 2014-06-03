@@ -1,0 +1,20 @@
+---
+- shell: keystone user-create --name=ceilometer --pass={{ ceilometer_pass }} --email=ceilometer@example.com && touch ~/.executed-ceilometer-storage-000 creates=~/.executed-ceilometer-storage-000
+  environment: admin_openrc
+  tags: ceilometer-storage
+- shell: keystone user-role-add --user=ceilometer --tenant=service --role=admin && touch ~/.executed-ceilometer-storage-002 creates=~/.executed-ceilometer-storage-002
+  environment: admin_openrc
+  tags: ceilometer-storage
+
+- shell: keystone role-create --name=ResellerAdmin && touch ~/.executed-ceilometer-storage-01 creates=~/.executed-ceilometer-storage-01
+  environment: admin_openrc
+  tags: ceilometer-storage
+
+- shell: keystone user-role-add --tenant service --user ceilometer --role $(keystone role-list | awk '/ ResellerAdmin / {print $2}') && touch ~/.executed-ceilometer-storage-02 creates=~/.executed-ceilometer-storage-02
+  environment: admin_openrc
+  tags: ceilometer-storage
+
+# - service: name={{ item }} state=restarted
+#   with_items:
+#     - openstack-swift-proxy
+#   tags: ceilometer-storage

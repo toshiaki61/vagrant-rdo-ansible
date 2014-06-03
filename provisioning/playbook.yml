@@ -27,3 +27,4 @@
       tags: swift-storage
 
 - include: playbooks/orchestration.yml
+- include: playbooks/telemetry.yml
