@@ -22,7 +22,8 @@
   with_items: 
     - mongod
   tags: ceilometer
-
+- wait_for: host=10.0.0.11 port=27017 delay=10
+  tags: ceilometer
 - shell: "mongo --host 10.0.0.11 --eval 'db = db.getSiblingDB(\"ceilometer\"); db.addUser({user: \"ceilometer\", pwd: \"{{ ceilometer_dbpass }}\", roles: [ \"readWrite\", \"dbAdmin\" ]})' && touch ~/.executed-ceilometer-01 creates=~/.executed-ceilometer-01"
   tags: ceilometer
 

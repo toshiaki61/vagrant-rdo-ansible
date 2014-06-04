@@ -78,6 +78,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     #ansible.verbose = "vvvv"
     ansible.groups = {
       "controller-node" => ["controller"],
+      # "identity-node" => ["controller"],
+      # "image-node" => ["controller"],
+      # "dashboard-node" => ["controller"],
       "network-node" => ["network"],
       "compute-node" => ["compute1"],
       "block-node" => [

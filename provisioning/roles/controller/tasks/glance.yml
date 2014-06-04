@@ -87,10 +87,15 @@
 - shell: chown -R glance:glance /var/lib/glance/ && sudo chown -R glance:glance /etc/glance && sudo chown -R glance:glance /var/log/glance && touch ~/.executed-glance-26 creates=~/.executed-glance-26
   tags: glance
 
-- service: name=openstack-glance-api state=running enabled=yes
+- shell: openstack-config --set /etc/glance/glance-api.conf DEFAULT notification_driver messaging && touch ~/.executed-ceilometer-image-01 creates=~/.executed-ceilometer-image-01
+  tags: glance
+- shell: openstack-config --set /etc/glance/glance-api.conf DEFAULT rpc_backend qpid && touch ~/.executed-ceilometer-image-02 creates=~/.executed-ceilometer-image-02
   tags: glance
 
-- service: name=openstack-glance-registry state=running enabled=yes
+- service: name={{ item }} state=running enabled=yes
+  with_items:
+    - openstack-glance-api
+    - openstack-glance-registry
   tags: glance
 
 - get_url: url="http://cdn.download.cirros-cloud.net/0.3.2/cirros-0.3.2-x86_64-disk.img" dest=/vagrant/tmp

@@ -10,4 +10,4 @@
 - include: dashboard.yml
 - include: cinder.yml
 - include: swift.yml
-- include: ceilometer.yml
+

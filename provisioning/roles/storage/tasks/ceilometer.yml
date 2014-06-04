@@ -14,7 +14,3 @@
   environment: admin_openrc
   tags: ceilometer-storage
 
-# - service: name={{ item }} state=restarted
-#   with_items:
-#     - openstack-swift-proxy
-#   tags: ceilometer-storage
