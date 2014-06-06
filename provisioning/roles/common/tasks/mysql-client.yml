@@ -1,4 +1,0 @@
----
-- name: ensure MySQL-python is at the latest version
-  yum: name=MySQL-python state=latest
-  tags: mysql-client

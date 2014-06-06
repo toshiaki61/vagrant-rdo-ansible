@@ -1,6 +1,0 @@
----
-- yum: name=ntp state=installed
-  tags: ntp
-
-- service: name=ntpd state=running enabled=yes
-  tags: ntp
