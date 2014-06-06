@@ -5,3 +5,78 @@ EXTERNAL_NETWORK_CIDR: 203.0.113.0/24
 
 TENANT_NETWORK_GATEWAY: 192.168.100.1
 TENANT_NETWORK_CIDR: 192.168.100.0/24
+
+database_users:
+  - { name: keystone, password: "{{ KEYSTONE_DBPASS }}", host: "%" }
+  - { name: glance, password: "{{ GLANCE_DBPASS }}", host: "%" }
+  - { name: nova, password: "{{ NOVA_DBPASS }}", host: "%" }
+  - { name: neutron, password: "{{ NEUTRON_DBPASS }}", host: "%" }
+  - { name: dash, password: "{{ DASH_DBPASS }}", host: "%" }
+  - { name: cinder, password: "{{ CINDER_DBPASS }}", host: "%" }
+  - { name: heat, password: "{{ HEAT_DBPASS }}", host: "%" }
+  - { name: trove, password: "{{ TROVE_DBPASS }}", host: "%" }
+  - { name: keystone, password: "{{ KEYSTONE_DBPASS }}", host: "localhost" }
+  - { name: glance, password: "{{ GLANCE_DBPASS }}", host: "localhost" }
+  - { name: nova, password: "{{ NOVA_DBPASS }}", host: "localhost" }
+  - { name: neutron, password: "{{ NEUTRON_DBPASS }}", host: "localhost" }
+  - { name: dash, password: "{{ DASH_DBPASS }}", host: "localhost" }
+  - { name: cinder, password: "{{ CINDER_DBPASS }}", host: "localhost" }
+  - { name: heat, password: "{{ HEAT_DBPASS }}", host: "localhost" }
+  - { name: trove, password: "{{ TROVE_DBPASS }}", host: "localhost" }
+  - { name: keystone, password: "{{ KEYSTONE_DBPASS }}", host: "controller" }
+  - { name: glance, password: "{{ GLANCE_DBPASS }}", host: "controller" }
+  - { name: nova, password: "{{ NOVA_DBPASS }}", host: "controller" }
+  - { name: neutron, password: "{{ NEUTRON_DBPASS }}", host: "controller" }
+  - { name: dash, password: "{{ DASH_DBPASS }}", host: "controller" }
+  - { name: cinder, password: "{{ CINDER_DBPASS }}", host: "controller" }
+  - { name: heat, password: "{{ HEAT_DBPASS }}", host: "controller" }
+  - { name: trove, password: "{{ TROVE_DBPASS }}", host: "controller" }
+
+keystone_roles:
+  - { index: "~/.executed-keystone-configure-12", role: "heat_stack_user" }
+  - { index: "~/.executed-keystone-configure-13", role: "ResellerAdmin" }
+
+keystone_users:
+  - { index: "~/.executed-keystone-user-01", name: "glance", password: "{{ GLANCE_PASS }}", email: "{{ GLANCE_EMAIL }}" }
+  - { index: "~/.executed-keystone-user-02", name: "nova", password: "{{ NOVA_PASS }}", email: "{{ NOVA_EMAIL }}" }
+  - { index: "~/.executed-keystone-user-03", name: "cinder", password: "{{ CINDER_PASS }}", email: "{{ CINDER_EMAIL }}" }
+  - { index: "~/.executed-keystone-user-04", name: "swift", password: "{{ SWIFT_PASS }}", email: "{{ SWIFT_EMAIL }}" }
+  - { index: "~/.executed-keystone-user-05", name: "neutron", password: "{{ NEUTRON_PASS }}", email: "{{ NEUTRON_EMAIL }}" }
+  - { index: "~/.executed-keystone-user-06", name: "heat", password: "{{ HEAT_PASS }}", email: "{{ HEAT_EMAIL }}" }
+  - { index: "~/.executed-keystone-user-07", name: "ceilometer", password: "{{ CEILOMETER_PASS }}", email: "{{ CEILOMETER_EMAIL }}" }
+  - { index: "~/.executed-keystone-user-08", name: "trove", password: "{{ TROVE_PASS }}", email: "{{ TROVE_EMAIL }}" }
+
+keystone_user_roles:
+  - { index: "~/.executed-keystone-user-role-01", user: glance, role: admin }
+  - { index: "~/.executed-keystone-user-role-02", user: nova, role: admin }
+  - { index: "~/.executed-keystone-user-role-03", user: cinder, role: admin }
+  - { index: "~/.executed-keystone-user-role-04", user: swift, role: admin }
+  - { index: "~/.executed-keystone-user-role-05", user: neutron, role: admin }
+  - { index: "~/.executed-keystone-user-role-06", user: heat, role: admin }
+  - { index: "~/.executed-keystone-user-role-07", user: ceilometer, role: admin }
+  - { index: "~/.executed-keystone-user-role-08", user: trove, role: admin }
+  - { index: "~/.executed-keystone-user-role-09", user: ceilometer, role: ResellerAdmin }
+
+keystone_services:
+  - { index: "~/.executed-keystone-service-01", name: glance, type: image, description: "OpenStack Image Service" }
+  - { index: "~/.executed-keystone-service-02", name: nova, type: compute, description: "OpenStack Compute" }
+  - { index: "~/.executed-keystone-service-03", name: cinder, type: volume, description: "OpenStack Block Storage" }
+  - { index: "~/.executed-keystone-service-04", name: cinderv2, type: volumev2, description: "OpenStack Block Storage v2" }
+  - { index: "~/.executed-keystone-service-05", name: swift, type: object-store, description: "OpenStack Object Storage" }
+  - { index: "~/.executed-keystone-service-06", name: neutron, type: network, description: "OpenStack Networking" }
+  - { index: "~/.executed-keystone-service-07", name: heat, type: orchestration, description: "Orchestration" }
+  - { index: "~/.executed-keystone-service-08", name: "heat-cfn", type: cloudformation, description: "Orchestration CloudFormation" }
+  - { index: "~/.executed-keystone-service-09", name: ceilometer, type: metering, description: "Telemetry" }
+  - { index: "~/.executed-keystone-service-10", name: trove, type: trove, description: "OpenStack Database Service" }
+
+keystone_endpoints:
+  - { index: "~/.executed-keystone-endpoint-01", type: network, public: "http://controller:9696", internal: "http://controller:9696", admin: "http://controller:9696" }
+  - { index: "~/.executed-keystone-endpoint-02", type: cloudformation, public: "http://controller:8000/v1", internal: "http://controller:8000/v1", admin: "http://controller:8000/v1" }
+  - { index: "~/.executed-keystone-endpoint-03", type: compute, public: "http://controller:8774/v2/%(tenant_id)s", internal: "http://controller:8774/v2/%(tenant_id)s", admin: "http://controller:8774/v2/%(tenant_id)s" }
+  - { index: "~/.executed-keystone-endpoint-04", type: image, public: "http://controller:9292", internal: "http://controller:9292", admin: "http://controller:9292" }
+  - { index: "~/.executed-keystone-endpoint-05", type: metering, public: "http://controller:8777", internal: "http://controller:8777", admin: "http://controller:8777" }
+  - { index: "~/.executed-keystone-endpoint-06", type: "object-store", public: "http://controller:8080/v1/AUTH_%(tenant_id)s", internal: "http://controller:8080/v1/AUTH_%(tenant_id)s", admin: "http://controller:8080" }
+  - { index: "~/.executed-keystone-endpoint-07", type: orchestration, public: "http://controller:8004/v1/%(tenant_id)s", internal: "http://controller:8004/v1/%(tenant_id)s", admin: "http://controller:8004/v1/%(tenant_id)s" }
+  - { index: "~/.executed-keystone-endpoint-08", type: volume, public: "http://controller:8776/v1/%(tenant_id)s", internal: "http://controller:8776/v1/%(tenant_id)s", admin: "http://controller:8776/v1/%(tenant_id)s" }
+  - { index: "~/.executed-keystone-endpoint-09", type: volumev2, public: "http://controller:8776/v2/%(tenant_id)s", internal: "http://controller:8776/v2/%(tenant_id)s", admin: "http://controller:8776/v2/%(tenant_id)s" }
+  - { index: "~/.executed-keystone-endpoint-10", type: trove, public: "http://controller:8779/v1.0/%(tenant_id)s", internal: "http://controller:8779/v1.0/%(tenant_id)s", admin: "http://controller:8779/v1.0/%(tenant_id)s" }

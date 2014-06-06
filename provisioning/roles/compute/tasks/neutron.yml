@@ -28,7 +28,7 @@
   tags: neutron
 - shell: openstack-config --set /etc/neutron/neutron.conf keystone_authtoken admin_user neutron && touch ~/.executed-neutron-10 creates=~/.executed-neutron-10
   tags: neutron
-- shell: openstack-config --set /etc/neutron/neutron.conf keystone_authtoken admin_password {{ neutron_pass }} && touch ~/.executed-neutron-11 creates=~/.executed-neutron-11
+- shell: openstack-config --set /etc/neutron/neutron.conf keystone_authtoken admin_password {{ NEUTRON_PASS }} && touch ~/.executed-neutron-11 creates=~/.executed-neutron-11
   tags: neutron
 - shell: openstack-config --set /etc/neutron/neutron.conf DEFAULT rpc_backend neutron.openstack.common.rpc.impl_qpid && touch ~/.executed-neutron-12 creates=~/.executed-neutron-12
   tags: neutron
@@ -79,7 +79,7 @@
   tags: neutron
 - shell: openstack-config --set /etc/nova/nova.conf DEFAULT neutron_admin_username neutron && touch ~/.executed-neutron-31 creates=~/.executed-neutron-31
   tags: neutron
-- shell: openstack-config --set /etc/nova/nova.conf DEFAULT neutron_admin_password {{ neutron_pass }} && touch ~/.executed-neutron-32 creates=~/.executed-neutron-32
+- shell: openstack-config --set /etc/nova/nova.conf DEFAULT neutron_admin_password {{ NEUTRON_PASS }} && touch ~/.executed-neutron-32 creates=~/.executed-neutron-32
   tags: neutron
 - shell: openstack-config --set /etc/nova/nova.conf DEFAULT neutron_admin_auth_url http://controller:35357/v2.0 && touch ~/.executed-neutron-33 creates=~/.executed-neutron-33
   tags: neutron
@@ -90,7 +90,7 @@
 - shell: openstack-config --set /etc/nova/nova.conf DEFAULT security_group_api neutron && touch ~/.executed-neutron-36 creates=~/.executed-neutron-36
   tags: neutron
 
-- shell: ln -s plugins/ml2/ml2_conf.ini /etc/neutron/plugin.ini && touch ~/.executed-neutron-37 creates=~/.executed-neutron-37
+- shell: ln -s /etc/neutron/plugins/ml2/ml2_conf.ini /etc/neutron/plugin.ini && touch ~/.executed-neutron-37 creates=~/.executed-neutron-37
   tags: neutron
 - shell: cp /etc/init.d/neutron-openvswitch-agent /etc/init.d/neutron-openvswitch-agent.orig && touch ~/.executed-neutron-38 creates=~/.executed-neutron-38
   tags: neutron

@@ -32,7 +32,7 @@
   tags: neutron
 - shell: openstack-config --set /etc/neutron/neutron.conf keystone_authtoken admin_user neutron && touch ~/.executed-neutron-13 creates=~/.executed-neutron-13
   tags: neutron
-- shell: openstack-config --set /etc/neutron/neutron.conf keystone_authtoken admin_password {{ neutron_pass }} && touch ~/.executed-neutron-14 creates=~/.executed-neutron-14
+- shell: openstack-config --set /etc/neutron/neutron.conf keystone_authtoken admin_password {{ NEUTRON_PASS }} && touch ~/.executed-neutron-14 creates=~/.executed-neutron-14
   tags: neutron
 
 - shell: openstack-config --set /etc/neutron/neutron.conf DEFAULT rpc_backend neutron.openstack.common.rpc.impl_qpid && touch ~/.executed-neutron-15 creates=~/.executed-neutron-15
@@ -72,11 +72,11 @@
   tags: neutron
 - shell: openstack-config --set /etc/neutron/metadata_agent.ini DEFAULT admin_user neutron && touch ~/.executed-neutron-30 creates=~/.executed-neutron-30
   tags: neutron
-- shell: openstack-config --set /etc/neutron/metadata_agent.ini DEFAULT admin_password {{ neutron_pass }} && touch ~/.executed-neutron-31 creates=~/.executed-neutron-31
+- shell: openstack-config --set /etc/neutron/metadata_agent.ini DEFAULT admin_password {{ NEUTRON_PASS }} && touch ~/.executed-neutron-31 creates=~/.executed-neutron-31
   tags: neutron
 - shell: openstack-config --set /etc/neutron/metadata_agent.ini DEFAULT nova_metadata_ip controller && touch ~/.executed-neutron-32 creates=~/.executed-neutron-32
   tags: neutron
-- shell: openstack-config --set /etc/neutron/metadata_agent.ini DEFAULT metadata_proxy_shared_secret {{ metadata_secret }} && touch ~/.executed-neutron-33 creates=~/.executed-neutron-33
+- shell: openstack-config --set /etc/neutron/metadata_agent.ini DEFAULT metadata_proxy_shared_secret {{ METADATA_SECRET }} && touch ~/.executed-neutron-33 creates=~/.executed-neutron-33
   tags: neutron
 - shell: openstack-config --set /etc/neutron/metadata_agent.ini DEFAULT verbose True && touch ~/.executed-neutron-34 creates=~/.executed-neutron-34
   tags: neutron

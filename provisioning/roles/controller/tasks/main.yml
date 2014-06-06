@@ -1,13 +1,8 @@
 ---
-- include: mysql-server.yml
-- include: messaging-server.yml
-- include: database.yml
+- include: server.yml
 - include: keystone.yml
 - include: glance.yml
 - include: nova.yml
 - include: neutron.yml
-- include: network.yml
 - include: dashboard.yml
 - include: cinder.yml
-- include: swift.yml
-

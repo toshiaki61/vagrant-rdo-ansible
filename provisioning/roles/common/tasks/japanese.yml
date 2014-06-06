@@ -1,24 +1,12 @@
 ---
-- shell: yum groupinstall -y "Japanese Support" && touch ~/.executed-japanese-1 creates=~/.executed-japanese-1
-  tags: japanese
-
-- shell: localedef -f UTF-8 -i ja_JP ja_JP.utf8 && touch ~/.executed-japanese-2 creates=~/.executed-japanese-2
-  tags: japanese
-
-- shell: sed -i 's/^/#/g' /etc/sysconfig/i18n && touch ~/.executed-japanese-3 creates=~/.executed-japanese-3
-  tags: japanese
-
-- shell: echo 'LANG="ja_JP.UTF-8"' | sudo tee -a /etc/sysconfig/i18n && touch ~/.executed-japanese-4 creates=~/.executed-japanese-4
-  tags: japanese
-
-- shell: echo 'SYSFONT="latarcyrheb-sun16"' | sudo tee -a /etc/sysconfig/i18n && touch ~/.executed-japanese-5 creates=~/.executed-japanese-5
-  tags: japanese
-
-- shell: cp /usr/share/zoneinfo/Japan /etc/localtime && touch ~/.executed-japanese-6 creates=~/.executed-japanese-6
-  tags: japanese
-
-- shell: sed -i 's/^ZONE/#ZONE/g' /etc/sysconfig/clock && touch ~/.executed-japanese-7 creates=~/.executed-japanese-7
-  tags: japanese
-
-- shell: echo 'ZONE="Asia/Tokyo"' | sudo tee -a /etc/sysconfig/clock && touch ~/.executed-japanese-8 creates=~/.executed-japanese-8
+- shell: "{{ item.command }} && touch {{ item.index }} creates={{ item.index }}"
+  with_items:
+    - { index: "~/.executed-japanese-01", command: "yum groupinstall -y \"Japanese Support\"" }
+    - { index: "~/.executed-japanese-02", command: "localedef -f UTF-8 -i ja_JP ja_JP.utf8" }
+    - { index: "~/.executed-japanese-03", command: "sed -i 's/^/#/g' /etc/sysconfig/i18n" }
+    - { index: "~/.executed-japanese-04", command: "echo 'LANG=\"ja_JP.UTF-8\"' | sudo tee -a /etc/sysconfig/i18n" }
+    - { index: "~/.executed-japanese-04", command: "echo 'SYSFONT=\"latarcyrheb-sun16\"' | sudo tee -a /etc/sysconfig/i18n" }
+    - { index: "~/.executed-japanese-05", command: "cp /usr/share/zoneinfo/Japan /etc/localtime" }
+    - { index: "~/.executed-japanese-06", command: "sed -i 's/^ZONE/#ZONE/g' /etc/sysconfig/clock" }
+    - { index: "~/.executed-japanese-07", command: "echo 'ZONE=\"Asia/Tokyo\"' | sudo tee -a /etc/sysconfig/clock" }
   tags: japanese

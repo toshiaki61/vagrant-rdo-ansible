@@ -35,13 +35,13 @@
   tags: ceilometer-compute
 - shell: openstack-config --set /etc/ceilometer/ceilometer.conf keystone_authtoken auth_protocol http && touch ~/.executed-ceilometer-compute-10 creates=~/.executed-ceilometer-compute-10
   tags: ceilometer-compute
-- shell: openstack-config --set /etc/ceilometer/ceilometer.conf keystone_authtoken admin_password {{ ceilometer_pass }} && touch ~/.executed-ceilometer-compute-11 creates=~/.executed-ceilometer-compute-11
+- shell: openstack-config --set /etc/ceilometer/ceilometer.conf keystone_authtoken admin_password {{ CEILOMETER_PASS }} && touch ~/.executed-ceilometer-compute-11 creates=~/.executed-ceilometer-compute-11
   tags: ceilometer-compute
 - shell: openstack-config --set /etc/ceilometer/ceilometer.conf service_credentials os_username ceilometer && touch ~/.executed-ceilometer-compute-12 creates=~/.executed-ceilometer-compute-12
   tags: ceilometer-compute
 - shell: openstack-config --set /etc/ceilometer/ceilometer.conf service_credentials os_tenant_name service && touch ~/.executed-ceilometer-compute-13 creates=~/.executed-ceilometer-compute-13
   tags: ceilometer-compute
-- shell: openstack-config --set /etc/ceilometer/ceilometer.conf service_credentials os_password {{ ceilometer_pass }} && touch ~/.executed-ceilometer-compute-14 creates=~/.executed-ceilometer-compute-14
+- shell: openstack-config --set /etc/ceilometer/ceilometer.conf service_credentials os_password {{ CEILOMETER_PASS }} && touch ~/.executed-ceilometer-compute-14 creates=~/.executed-ceilometer-compute-14
   tags: ceilometer-compute
 - shell: openstack-config --set /etc/ceilometer/ceilometer.conf service_credentials os_auth_url http://controller:5000/v2.0 && touch ~/.executed-ceilometer-compute-15 creates=~/.executed-ceilometer-compute-15
   tags: ceilometer-compute

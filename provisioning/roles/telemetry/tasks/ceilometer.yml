@@ -24,10 +24,10 @@
   tags: ceilometer
 - wait_for: host=10.0.0.11 port=27017 delay=10
   tags: ceilometer
-- shell: "mongo --host 10.0.0.11 --eval 'db = db.getSiblingDB(\"ceilometer\"); db.addUser({user: \"ceilometer\", pwd: \"{{ ceilometer_dbpass }}\", roles: [ \"readWrite\", \"dbAdmin\" ]})' && touch ~/.executed-ceilometer-01 creates=~/.executed-ceilometer-01"
+- shell: "mongo --host 10.0.0.11 --eval 'db = db.getSiblingDB(\"ceilometer\"); db.addUser({user: \"ceilometer\", pwd: \"{{ CEILOMETER_DBPASS }}\", roles: [ \"readWrite\", \"dbAdmin\" ]})' && touch ~/.executed-ceilometer-01 creates=~/.executed-ceilometer-01"
   tags: ceilometer
 
-- shell: openstack-config --set /etc/ceilometer/ceilometer.conf database connection mongodb://ceilometer:{{ ceilometer_dbpass }}@controller:27017/ceilometer && touch ~/.executed-ceilometer-011 creates=~/.executed-ceilometer-011
+- shell: openstack-config --set /etc/ceilometer/ceilometer.conf database connection mongodb://ceilometer:{{ CEILOMETER_DBPASS }}@controller:27017/ceilometer && touch ~/.executed-ceilometer-011 creates=~/.executed-ceilometer-011
   tags: ceilometer
 
 - shell: openstack-config --set /etc/ceilometer/ceilometer.conf publisher metering_secret {{ CEILOMETER_TOKEN }} && touch ~/.executed-ceilometer-02 creates=~/.executed-ceilometer-02
@@ -49,7 +49,7 @@
   tags: ceilometer
 - shell: openstack-config --set /etc/ceilometer/ceilometer.conf keystone_authtoken auth_uri http://controller:5000 && touch ~/.executed-ceilometer-11 creates=~/.executed-ceilometer-11
   tags: ceilometer
-- shell: openstack-config --set /etc/ceilometer/ceilometer.conf keystone_authtoken admin_password {{ ceilometer_pass }} && touch ~/.executed-ceilometer-12 creates=~/.executed-ceilometer-12
+- shell: openstack-config --set /etc/ceilometer/ceilometer.conf keystone_authtoken admin_password {{ CEILOMETER_PASS }} && touch ~/.executed-ceilometer-12 creates=~/.executed-ceilometer-12
   tags: ceilometer
 - shell: openstack-config --set /etc/ceilometer/ceilometer.conf service_credentials os_auth_url http://controller:5000/v2.0 && touch ~/.executed-ceilometer-13 creates=~/.executed-ceilometer-13
   tags: ceilometer
@@ -57,14 +57,7 @@
   tags: ceilometer
 - shell: openstack-config --set /etc/ceilometer/ceilometer.conf service_credentials os_tenant_name service && touch ~/.executed-ceilometer-15 creates=~/.executed-ceilometer-15
   tags: ceilometer
-- shell: openstack-config --set /etc/ceilometer/ceilometer.conf service_credentials os_password {{ ceilometer_pass }} && touch ~/.executed-ceilometer-16 creates=~/.executed-ceilometer-16
-  tags: ceilometer
-
-- shell: keystone service-create --name=ceilometer --type=metering --description="Telemetry" && touch ~/.executed-ceilometer-17 creates=~/.executed-ceilometer-17
-  environment: admin_openrc
-  tags: ceilometer
-- shell: keystone endpoint-create --service-id=$(keystone service-list | awk '/ metering / {print $2}') --publicurl=http://controller:8777 --internalurl=http://controller:8777 --adminurl=http://controller:8777 && touch ~/.executed-ceilometer-18 creates=~/.executed-ceilometer-18
-  environment: admin_openrc
+- shell: openstack-config --set /etc/ceilometer/ceilometer.conf service_credentials os_password {{ CEILOMETER_PASS }} && touch ~/.executed-ceilometer-16 creates=~/.executed-ceilometer-16
   tags: ceilometer
 
 - service: name={{ item }} state=running enabled=yes

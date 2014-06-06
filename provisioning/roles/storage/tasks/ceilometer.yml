@@ -1,5 +1,5 @@
 ---
-- shell: keystone user-create --name=ceilometer --pass={{ ceilometer_pass }} --email=ceilometer@example.com && touch ~/.executed-ceilometer-storage-000 creates=~/.executed-ceilometer-storage-000
+- shell: keystone user-create --name=ceilometer --pass={{ CEILOMETER_PASS }} --email=ceilometer@example.com && touch ~/.executed-ceilometer-storage-000 creates=~/.executed-ceilometer-storage-000
   environment: admin_openrc
   tags: ceilometer-storage
 - shell: keystone user-role-add --user=ceilometer --tenant=service --role=admin && touch ~/.executed-ceilometer-storage-002 creates=~/.executed-ceilometer-storage-002

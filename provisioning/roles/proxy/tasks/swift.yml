@@ -13,7 +13,7 @@
 - service: name=memcached state=running enabled=yes
   tags: swift-proxy
 
-- shell: cat /vagrant/provisioning/roles/proxy/files/proxy-server.conf | sed 's/SWIFT_PASS/{{ swift_pass }}/g' | sudo tee /etc/swift/proxy-server.conf && touch ~/.executed-swift-proxy-02 creates=~/.executed-swift-proxy-02
+- shell: cat /vagrant/provisioning/roles/proxy/files/proxy-server.conf | sed 's/SWIFT_PASS/{{ SWIFT_PASS }}/g' | sudo tee /etc/swift/proxy-server.conf && touch ~/.executed-swift-proxy-02 creates=~/.executed-swift-proxy-02
   tags: swift-proxy
 
 - shell: openstack-config --set /etc/swift/proxy-server.conf filter:ceilometer use egg:ceilometer#swift && touch ~/.executed-ceilometer-storage-03 creates=~/.executed-ceilometer-storage-03

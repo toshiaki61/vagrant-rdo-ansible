@@ -26,7 +26,7 @@
   tags: cinder
 - shell: openstack-config --set /etc/cinder/cinder.conf keystone_authtoken admin_tenant_name service && touch ~/.executed-cinder-block-8 creates=~/.executed-cinder-block-8
   tags: cinder
-- shell: openstack-config --set /etc/cinder/cinder.conf keystone_authtoken admin_password {{ cinder_pass }} && touch ~/.executed-cinder-block-9 creates=~/.executed-cinder-block-9
+- shell: openstack-config --set /etc/cinder/cinder.conf keystone_authtoken admin_password {{ CINDER_PASS }} && touch ~/.executed-cinder-block-9 creates=~/.executed-cinder-block-9
   tags: cinder
 
 - shell: openstack-config --set /etc/cinder/cinder.conf DEFAULT rpc_backend cinder.openstack.common.rpc.impl_qpid && touch ~/.executed-cinder-block-10 creates=~/.executed-cinder-block-10
@@ -34,7 +34,7 @@
 - shell: openstack-config --set /etc/cinder/cinder.conf DEFAULT qpid_hostname controller && touch ~/.executed-cinder-block-11 creates=~/.executed-cinder-block-11
   tags: cinder
 
-- shell: openstack-config --set /etc/cinder/cinder.conf database connection mysql://cinder:{{ cinder_dbpass }}@controller/cinder && touch ~/.executed-cinder-block-12 creates=~/.executed-cinder-block-12
+- shell: openstack-config --set /etc/cinder/cinder.conf database connection mysql://cinder:{{ CINDER_DBPASS }}@controller/cinder && touch ~/.executed-cinder-block-12 creates=~/.executed-cinder-block-12
   tags: cinder
 
 - shell: openstack-config --set /etc/cinder/cinder.conf DEFAULT glance_host controller && touch ~/.executed-cinder-block-13 creates=~/.executed-cinder-block-13

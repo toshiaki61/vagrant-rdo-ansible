@@ -1,68 +1,68 @@
 ---
 #$(openssl rand -hex 10)
 
-# database password of identity service
-keystone_dbpass: pass
-# password of user demo
-demo_pass: pass
-# password of user admin
-admin_pass: pass
-# database password for image service
-glance_dbpass: pass
-# password of image service user glance
-glance_pass: pass
-# database password for compute service
-nova_dbpass: pass
-# password of compute service user nova
-nova_pass: pass
-# database password for the dashboard
-dash_dbpass: pass
-# database password for the block storage service
-cinder_dbpass: pass
-# password of block storage service user cinder
-cinder_pass: pass
-# database password for the networking service
-neutron_dbpass: pass
-# password of networking service user neutron
-neutron_pass: pass
-# database password for the orchestration service
-heat_dbpass: pass
-# password of orchestration service user heat
-heat_pass: pass
-# database password for the telemetry service
-ceilometer_dbpass: pass
-# password of telemetry service user ceilometer
-ceilometer_pass: pass
-# database password of database service
-trove_dbpass: pass
-# password of database service user trove
-trove_pass: pass
+KEYSTONE_DBPASS: pass
+DEMO_PASS: pass
+ADMIN_PASS: pass
 
-swift_pass: pass
+GLANCE_DBPASS: pass
+GLANCE_PASS: pass
+GLANCE_EMAIL: glance@example.com
 
-root_dbpass: pass
+NOVA_DBPASS: pass
+NOVA_PASS: pass
+NOVA_EMAIL: nova@example.com
 
-admin_token: admin
+DASH_DBPASS: pass
 
-admin_email: admin@localhost
-demo_email: demo@localhost
+CINDER_DBPASS: pass
+CINDER_PASS: pass
+CINDER_EMAIL: cinder@example.com
+
+NEUTRON_DBPASS: pass
+NEUTRON_PASS: pass
+NEUTRON_EMAIL: neutron@example.com
+
+HEAT_DBPASS: pass
+HEAT_PASS: pass
+HEAT_EMAIL: heat@example.com
+
+CEILOMETER_DBPASS: pass
+CEILOMETER_PASS: pass
+CEILOMETER_EMAIL: ceilometer@example.com
+
+TROVE_DBPASS: pass
+TROVE_PASS: pass
+TROVE_EMAIL: ceilometer@example.com
+
+SWIFT_PASS: pass
+SWIFT_EMAIL: swift@example.com
+
+ROOT_DBPASS: pass
+
+ADMIN_TOKEN: admin
+
+ADMIN_EMAIL: admin@localhost
+DEMO_EMAIL: demo@localhost
+
+METADATA_SECRET: meta
+
+CEILOMETER_TOKEN: fc1ff2f3620bc3fa8b7a
+
+
 
 service_token:
-  OS_SERVICE_TOKEN: "{{ admin_token }}"
+  OS_SERVICE_TOKEN: "{{ ADMIN_TOKEN }}"
   OS_SERVICE_ENDPOINT: http://controller:35357/v2.0
 
 admin_openrc:
   OS_USERNAME: admin
-  OS_PASSWORD: "{{ admin_pass }}"
+  OS_PASSWORD: "{{ ADMIN_PASS }}"
   OS_TENANT_NAME: admin
   OS_AUTH_URL: http://controller:35357/v2.0
 
 demo_openrc:
   OS_USERNAME: demo
-  OS_PASSWORD: "{{ demo_pass }}"
+  OS_PASSWORD: "{{ DEMO_PASS }}"
   OS_TENANT_NAME: demo
   OS_AUTH_URL: http://controller:35357/v2.0
-
-metadata_secret: meta
-
-CEILOMETER_TOKEN: fc1ff2f3620bc3fa8b7a

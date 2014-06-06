@@ -28,7 +28,7 @@
 
 - shell: cat /vagrant/provisioning/roles/controller/files/local_settings | sudo tee -a /etc/openstack-dashboard/local_settings && touch ~/.executed-dashboard-2.1 creates=~/.executed-dashboard-2.1
   tags: dashboard
-- shell: "echo \"DATABASES = {'default': {'ENGINE': 'django.db.backends.mysql','NAME': 'dash','USER': 'dash','PASSWORD': '{{ dash_dbpass }}','HOST': 'localhost', 'default-character-set': 'utf8'}}\" | sudo tee -a /etc/openstack-dashboard/local_settings && touch ~/.executed-dashboard-7 creates=~/.executed-dashboard-7"
+- shell: "echo \"DATABASES = {'default': {'ENGINE': 'django.db.backends.mysql','NAME': 'dash','USER': 'dash','PASSWORD': '{{ DASH_DBPASS }}','HOST': 'localhost', 'default-character-set': 'utf8'}}\" | sudo tee -a /etc/openstack-dashboard/local_settings && touch ~/.executed-dashboard-7 creates=~/.executed-dashboard-7"
   tags: dashboard
 
 - shell: /usr/share/openstack-dashboard/manage.py syncdb --noinput && touch ~/.executed-dashboard-8 creates=~/.executed-dashboard-8
@@ -40,14 +40,15 @@
 - stat: path=/vagrant/tmp/horizon
   register: check_path
   tags: dashboard
+
 - git: repo=git://github.com/openstack/horizon.git
        dest=/vagrant/tmp/horizon
        version=stable/icehouse
   # when: check_path.stat.exists == false
   tags: dashboard
+
 - shell: cp -R /vagrant/tmp/horizon/openstack_dashboard/locale/ja/LC_MESSAGES /usr/share/openstack-dashboard/openstack_dashboard/locale/ja/ && touch ~/.executed-dashboard-10 creates=~/.executed-dashboard-10
   tags: dashboard
-
 
 - service: name={{ item }} state=restarted
   with_items:
