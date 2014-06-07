@@ -1,0 +1,8 @@
+---
+- include: server.yml
+- include: keystone.yml
+- include: glance.yml
+- include: nova-management.yml
+- include: neutron-server.yml
+- include: dashboard.yml
+- include: cinder-management.yml

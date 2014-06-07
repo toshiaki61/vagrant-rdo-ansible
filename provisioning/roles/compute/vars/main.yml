@@ -1,2 +1,2 @@
 ---
-instance_tunnels_interface_ip_address: 10.0.10.31
+INSTANCE_TUNNELS_INTERFACE_IP_ADDRESS: 10.0.10.31

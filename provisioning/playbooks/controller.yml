@@ -2,4 +2,10 @@
 - hosts: controller-node
   sudo: yes
   roles:
-    - ../roles/controller
+    - ../roles/controller-service
+    - ../roles/cinder-volume
+    - ../roles/swift-proxy
+    - ../roles/swift-storage
+    - ../roles/heat
+    - ../roles/ceilometer-core
+    - ../roles/trove-management

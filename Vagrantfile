@@ -80,23 +80,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       "controller-node" => ["controller"],
       "network-node" => ["network"],
       "compute-node" => ["compute1"],
-      "block-node" => [
-        # "block1",
-        "controller",
-      ],
-      "storage-node" => [
-        # "storage1",
-        "controller",
-      ],
-      "proxy-node" => [
-        "controller",
-      ],
-      "orchestration-node" => [
-        "controller",
-      ],
-      "telemetry-node" => [
-        "controller",
-      ],
     }
   end
 end

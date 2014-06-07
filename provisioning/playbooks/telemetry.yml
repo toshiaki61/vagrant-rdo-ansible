@@ -1,5 +1,0 @@
----
-- hosts: telemetry-node
-  sudo: yes
-  roles:
-    - ../roles/telemetry

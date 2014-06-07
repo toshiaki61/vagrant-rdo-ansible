@@ -1,0 +1,35 @@
+---
+- yum: name={{ item }} state=installed
+  with_items:
+    - openstack-heat-api
+    - openstack-heat-engine
+    - openstack-heat-api-cfn
+  tags: heat
+
+- shell: openstack-config --set {{ item.target }} {{ item.group }} {{ item.key }} {{ item.value }} && touch {{ item.index }} creates={{ item.index }}
+  with_items:
+    - { index: "~/.executed-heat-01", group: "database", key: "connection", value: "mysql://heat:{{ HEAT_DBPASS }}@controller/heat", target: "/etc/heat/heat.conf" }
+    # - { index: "~/.executed-heat-02", group: "keystone_authtoken", key: "auth_host", value: "controller", target: "/etc/heat/heat.conf" }
+    # - { index: "~/.executed-heat-03", group: "keystone_authtoken", key: "auth_port", value: "35357", target: "/etc/heat/heat.conf" }
+    # - { index: "~/.executed-heat-04", group: "keystone_authtoken", key: "auth_protocol", value: "http", target: "/etc/heat/heat.conf" }
+    - { index: "~/.executed-heat-04", group: "keystone_authtoken", key: "identity_uri", value: "http://controller:35357/v2.0", target: "/etc/heat/heat.conf" }
+    - { index: "~/.executed-heat-05", group: "keystone_authtoken", key: "auth_uri", value: "http://controller:5000/v2.0", target: "/etc/heat/heat.conf" }
+    - { index: "~/.executed-heat-06", group: "keystone_authtoken", key: "admin_tenant_name", value: "service", target: "/etc/heat/heat.conf" }
+    - { index: "~/.executed-heat-07", group: "keystone_authtoken", key: "admin_user", value: "heat", target: "/etc/heat/heat.conf" }
+    - { index: "~/.executed-heat-08", group: "keystone_authtoken", key: "admin_password", value: "{{ HEAT_PASS }}", target: "/etc/heat/heat.conf" }
+    - { index: "~/.executed-heat-09", group: "ec2authtoken", key: "auth_uri", value: "http://controller:5000/v2.0", target: "/etc/heat/heat.conf" }
+    - { index: "~/.executed-heat-10", group: "DEFAULT", key: "heat_metadata_server_url", value: "http://10.0.0.11:8000", target: "/etc/heat/heat.conf" }
+    - { index: "~/.executed-heat-11", group: "DEFAULT", key: "heat_waitcondition_server_url", value: "http://10.0.0.11:8000/v1/waitcondition", target: "/etc/heat/heat.conf" }
+  tags: heat
+
+- shell: "{{ item.command }} && touch {{ item.index }} creates={{ item.index }}"
+  with_items:
+    - { index: "~/.executed-heat-21", command: "su -s /bin/sh -c \"heat-manage db_sync\" heat" }
+  tags: heat
+
+- service: name={{ item }} state=running enabled=yes
+  with_items: 
+    - openstack-heat-api
+    - openstack-heat-api-cfn
+    - openstack-heat-engine
+  tags: heat

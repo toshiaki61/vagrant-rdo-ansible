@@ -1,0 +1,42 @@
+---
+- yum: name={{ item }} state=installed
+  with_items:
+    - memcached
+    - python-memcached
+    - mod_wsgi
+    - openstack-dashboard
+  tags: dashboard
+
+- git: repo=git://github.com/openstack/horizon.git
+       dest=/tmp/horizon
+       version=stable/icehouse
+  tags: dashboard
+
+- copy: src=local_settings dest=/tmp/local_settings
+  tags: dashboard
+
+- shell: "{{ item.command }} && touch {{ item.index }} creates={{ item.index }}"
+  with_items:
+    - { index: "~/.executed-dashboard-01", command: "sed -i \"s/'BACKEND' : 'django.core.cache.backends.locmem.LocMemCache'/'BACKEND' : 'django.core.cache.backends.memcached.MemcachedCache','LOCATION' : '127.0.0.1:11211'/g\" /etc/openstack-dashboard/local_settings" }
+    - { index: "~/.executed-dashboard-02", command: "sed -i 's,^TIME_ZONE = \"UTC\",TIME_ZONE = \"Asia/Tokyo\",g' /etc/openstack-dashboard/local_settings" }
+    - { index: "~/.executed-dashboard-03", command: "sed -i \"s/^ALLOWED_HOSTS =.*/ALLOWED_HOSTS = ['*']/g\" /etc/openstack-dashboard/local_settings" }
+    - { index: "~/.executed-dashboard-04", command: "sed -i 's/^OPENSTACK_HOST =.*/OPENSTACK_HOST = \"controller\"/g' /etc/openstack-dashboard/local_settings" }
+#    - { index: "~/.executed-dashboard-00", command: "setsebool -P httpd_can_network_connect on" }
+    - { index: "~/.executed-dashboard-05", command: "echo \"ServerName controller\" | sudo tee /etc/httpd/conf.d/domain.conf" }
+    - { index: "~/.executed-dashboard-11", command: "cat /tmp/local_settings | sudo tee -a /etc/openstack-dashboard/local_settings" }
+    - { index: "~/.executed-dashboard-12", command: "echo \"DATABASES = {'default': {'ENGINE': 'django.db.backends.mysql','NAME': 'dash','USER': 'dash','PASSWORD': '{{ DASH_DBPASS }}','HOST': 'localhost', 'default-character-set': 'utf8'}}\" | sudo tee -a /etc/openstack-dashboard/local_settings" }
+    - { index: "~/.executed-dashboard-13", command: "/usr/share/openstack-dashboard/manage.py syncdb --noinput" }
+    - { index: "~/.executed-dashboard-14", command: "chown apache:apache /tmp/.secret_key_store" }
+    - { index: "~/.executed-dashboard-21", command: "cp -R /tmp/horizon/openstack_dashboard/locale/ja/LC_MESSAGES /usr/share/openstack-dashboard/openstack_dashboard/locale/ja/" }
+  tags: dashboard
+
+- service: name={{ item }} state=running enabled=yes
+  with_items:
+    - httpd
+    - memcached
+  tags: dashboard
+
+- service: name={{ item }} state=restarted
+  with_items:
+    - openstack-nova-api
+  tags: dashboard

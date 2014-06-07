@@ -1,16 +1,14 @@
 ---
-- shell: cp /etc/sysctl.conf /etc/sysctl.conf.orig && touch ~/.executed-neutron-1 creates=~/.executed-neutron-1
+- shell: "{{ item.command }} && touch {{ item.index }} creates={{ item.index }}"
+  with_items:
+    - { index: "~/.executed-neutron-01", command: "cp /etc/sysctl.conf /etc/sysctl.conf.orig" }
+    - { index: "~/.executed-neutron-02", command: "sed -i 's,net.ipv4.ip_forward.*,net.ipv4.ip_forward=1,g' /etc/sysctl.conf" }
+    - { index: "~/.executed-neutron-03", command: "sed -i 's,net.ipv4.conf.all.rp_filter.*,net.ipv4.conf.all.rp_filter=0,g' /etc/sysctl.conf" }
+    - { index: "~/.executed-neutron-04", command: "sed -i 's,net.ipv4.conf.default.rp_filter.*,net.ipv4.conf.default.rp_filter=0,g' /etc/sysctl.conf" }
+    - { index: "~/.executed-neutron-05", command: "sed -i 's/^net.bridge/#net.bridge/g' /etc/sysctl.conf" }
+    - { index: "~/.executed-neutron-06", command: "sysctl -p" }
   tags: neutron
-- shell: sed -i 's,net.ipv4.ip_forward.*,net.ipv4.ip_forward=1,g' /etc/sysctl.conf && touch ~/.executed-neutron-3 creates=~/.executed-neutron-3
-  tags: neutron
-- shell: sed -i 's,net.ipv4.conf.all.rp_filter.*,net.ipv4.conf.all.rp_filter=0,g' /etc/sysctl.conf && touch ~/.executed-neutron-4 creates=~/.executed-neutron-4
-  tags: neutron
-- shell: sed -i 's,net.ipv4.conf.default.rp_filter.*,net.ipv4.conf.default.rp_filter=0,g' /etc/sysctl.conf && touch ~/.executed-neutron-5 creates=~/.executed-neutron-5
-  tags: neutron
-- shell: sed -i 's/^net.bridge/#net.bridge/g' /etc/sysctl.conf && touch ~/.executed-neutron-5.5 creates=~/.executed-neutron-5.5
-  tags: neutron
-- shell: sysctl -p && touch ~/.executed-neutron-6 creates=~/.executed-neutron-6
-  tags: neutron
+
 - yum: name={{ item }} state=installed
   with_items:
     - openstack-neutron
@@ -18,87 +16,50 @@
     - openstack-neutron-openvswitch
   tags: neutron
 
-- shell: openstack-config --set /etc/neutron/neutron.conf DEFAULT auth_strategy keystone && touch ~/.executed-neutron-7 creates=~/.executed-neutron-7
-  tags: neutron
-- shell: openstack-config --set /etc/neutron/neutron.conf keystone_authtoken auth_uri http://controller:5000 && touch ~/.executed-neutron-8 creates=~/.executed-neutron-8
-  tags: neutron
-- shell: openstack-config --set /etc/neutron/neutron.conf keystone_authtoken auth_host controller && touch ~/.executed-neutron-9 creates=~/.executed-neutron-9
-  tags: neutron
-- shell: openstack-config --set /etc/neutron/neutron.conf keystone_authtoken auth_protocol http && touch ~/.executed-neutron-10 creates=~/.executed-neutron-10
-  tags: neutron
-- shell: openstack-config --set /etc/neutron/neutron.conf keystone_authtoken auth_port 35357 && touch ~/.executed-neutron-11 creates=~/.executed-neutron-11
-  tags: neutron
-- shell: openstack-config --set /etc/neutron/neutron.conf keystone_authtoken admin_tenant_name service && touch ~/.executed-neutron-12 creates=~/.executed-neutron-12
-  tags: neutron
-- shell: openstack-config --set /etc/neutron/neutron.conf keystone_authtoken admin_user neutron && touch ~/.executed-neutron-13 creates=~/.executed-neutron-13
-  tags: neutron
-- shell: openstack-config --set /etc/neutron/neutron.conf keystone_authtoken admin_password {{ NEUTRON_PASS }} && touch ~/.executed-neutron-14 creates=~/.executed-neutron-14
-  tags: neutron
-
-- shell: openstack-config --set /etc/neutron/neutron.conf DEFAULT rpc_backend neutron.openstack.common.rpc.impl_qpid && touch ~/.executed-neutron-15 creates=~/.executed-neutron-15
-  tags: neutron
-- shell: openstack-config --set /etc/neutron/neutron.conf DEFAULT qpid_hostname controller && touch ~/.executed-neutron-16 creates=~/.executed-neutron-16
-  tags: neutron
-- shell: openstack-config --set /etc/neutron/neutron.conf DEFAULT core_plugin ml2 && touch ~/.executed-neutron-17 creates=~/.executed-neutron-17
-  tags: neutron
-- shell: openstack-config --set /etc/neutron/neutron.conf DEFAULT service_plugins router && touch ~/.executed-neutron-18 creates=~/.executed-neutron-18
-  tags: neutron
-- shell: openstack-config --set /etc/neutron/neutron.conf DEFAULT verbose True && touch ~/.executed-neutron-19 creates=~/.executed-neutron-19
-  tags: neutron
-- shell: sed -i 's/^service_provider=/#service_provider=/g' /etc/neutron/neutron.conf && touch ~/.executed-neutron-19.1 creates=~/.executed-neutron-19.1
-  tags: neutron
-
-- shell: openstack-config --set /etc/neutron/l3_agent.ini DEFAULT interface_driver neutron.agent.linux.interface.OVSInterfaceDriver && touch ~/.executed-neutron-20 creates=~/.executed-neutron-20
-  tags: neutron
-- shell: openstack-config --set /etc/neutron/l3_agent.ini DEFAULT use_namespaces True && touch ~/.executed-neutron-21 creates=~/.executed-neutron-21
-  tags: neutron
-- shell: openstack-config --set /etc/neutron/l3_agent.ini DEFAULT verbose True && touch ~/.executed-neutron-22 creates=~/.executed-neutron-22
-  tags: neutron
-
-- shell: openstack-config --set /etc/neutron/dhcp_agent.ini DEFAULT interface_driver neutron.agent.linux.interface.OVSInterfaceDriver && touch ~/.executed-neutron-23 creates=~/.executed-neutron-23
-  tags: neutron
-- shell: openstack-config --set /etc/neutron/dhcp_agent.ini DEFAULT dhcp_driver neutron.agent.linux.dhcp.Dnsmasq && touch ~/.executed-neutron-24 creates=~/.executed-neutron-24
-  tags: neutron
-- shell: openstack-config --set /etc/neutron/dhcp_agent.ini DEFAULT use_namespaces True && touch ~/.executed-neutron-25 creates=~/.executed-neutron-25
-  tags: neutron
-- shell: openstack-config --set /etc/neutron/dhcp_agent.ini DEFAULT verbose True && touch ~/.executed-neutron-26 creates=~/.executed-neutron-26
+- shell: openstack-config --set {{ item.target }} {{ item.group }} {{ item.key }} {{ item.value }} && touch {{ item.index }} creates={{ item.index }}
+  with_items:
+    - { index: "~/.executed-neutron-11", group: "DEFAULT", key: "auth_strategy", value: "keystone", target: "/etc/neutron/neutron.conf" }
+    - { index: "~/.executed-neutron-12", group: "keystone_authtoken", key: "auth_uri", value: "http://controller:5000", target: "/etc/neutron/neutron.conf" }
+    - { index: "~/.executed-neutron-13", group: "keystone_authtoken", key: "auth_host", value: "controller", target: "/etc/neutron/neutron.conf" }
+    - { index: "~/.executed-neutron-14", group: "keystone_authtoken", key: "auth_protocol", value: "http", target: "/etc/neutron/neutron.conf" }
+    - { index: "~/.executed-neutron-15", group: "keystone_authtoken", key: "auth_port", value: "35357", target: "/etc/neutron/neutron.conf" }
+    - { index: "~/.executed-neutron-16", group: "keystone_authtoken", key: "admin_tenant_name", value: "service", target: "/etc/neutron/neutron.conf" }
+    - { index: "~/.executed-neutron-17", group: "keystone_authtoken", key: "admin_user", value: "neutron", target: "/etc/neutron/neutron.conf" }
+    - { index: "~/.executed-neutron-18", group: "keystone_authtoken", key: "admin_password", value: "{{ NEUTRON_PASS }}", target: "/etc/neutron/neutron.conf" }
+    - { index: "~/.executed-neutron-19", group: "DEFAULT", key: "rpc_backend", value: "neutron.openstack.common.rpc.impl_qpid", target: "/etc/neutron/neutron.conf" }
+    - { index: "~/.executed-neutron-20", group: "DEFAULT", key: "qpid_hostname", value: "controller", target: "/etc/neutron/neutron.conf" }
+    - { index: "~/.executed-neutron-21", group: "DEFAULT", key: "core_plugin", value: "ml2", target: "/etc/neutron/neutron.conf" }
+    - { index: "~/.executed-neutron-22", group: "DEFAULT", key: "service_plugins", value: "router", target: "/etc/neutron/neutron.conf" }
+    - { index: "~/.executed-neutron-23", group: "DEFAULT", key: "verbose", value: "True", target: "/etc/neutron/neutron.conf" }
+    - { index: "~/.executed-neutron-24", group: "DEFAULT", key: "interface_driver", value: "neutron.agent.linux.interface.OVSInterfaceDriver", target: "/etc/neutron/l3_agent.ini" }
+    - { index: "~/.executed-neutron-25", group: "DEFAULT", key: "use_namespaces", value: "True", target: "/etc/neutron/l3_agent.ini" }
+    - { index: "~/.executed-neutron-26", group: "DEFAULT", key: "verbose", value: "True", target: "/etc/neutron/l3_agent.ini" }
+    - { index: "~/.executed-neutron-27", group: "DEFAULT", key: "interface_driver", value: "neutron.agent.linux.interface.OVSInterfaceDriver", target: "/etc/neutron/dhcp_agent.ini" }
+    - { index: "~/.executed-neutron-28", group: "DEFAULT", key: "dhcp_driver", value: "neutron.agent.linux.dhcp.Dnsmasq", target: "/etc/neutron/dhcp_agent.ini" }
+    - { index: "~/.executed-neutron-29", group: "DEFAULT", key: "use_namespaces", value: "True", target: "/etc/neutron/dhcp_agent.ini" }
+    - { index: "~/.executed-neutron-30", group: "DEFAULT", key: "verbose", value: "True", target: "/etc/neutron/dhcp_agent.ini" }
+    - { index: "~/.executed-neutron-31", group: "DEFAULT", key: "auth_url", value: "http://controller:5000/v2.0", target: "/etc/neutron/metadata_agent.ini" }
+    - { index: "~/.executed-neutron-32", group: "DEFAULT", key: "auth_region", value: "regionOne", target: "/etc/neutron/metadata_agent.ini" }
+    - { index: "~/.executed-neutron-33", group: "DEFAULT", key: "admin_tenant_name", value: "service", target: "/etc/neutron/metadata_agent.ini" }
+    - { index: "~/.executed-neutron-34", group: "DEFAULT", key: "admin_user", value: "neutron", target: "/etc/neutron/metadata_agent.ini" }
+    - { index: "~/.executed-neutron-35", group: "DEFAULT", key: "admin_password", value: "{{ NEUTRON_PASS }}", target: "/etc/neutron/metadata_agent.ini" }
+    - { index: "~/.executed-neutron-36", group: "DEFAULT", key: "nova_metadata_ip", value: "controller", target: "/etc/neutron/metadata_agent.ini" }
+    - { index: "~/.executed-neutron-37", group: "DEFAULT", key: "metadata_proxy_shared_secret", value: "{{ METADATA_SECRET }}", target: "/etc/neutron/metadata_agent.ini" }
+    - { index: "~/.executed-neutron-38", group: "DEFAULT", key: "verbose", value: "True", target: "/etc/neutron/metadata_agent.ini" }
+    - { index: "~/.executed-neutron-39", group: "ml2", key: "type_drivers", value: "gre", target: "/etc/neutron/plugins/ml2/ml2_conf.ini" }
+    - { index: "~/.executed-neutron-40", group: "ml2", key: "tenant_network_types", value: "gre", target: "/etc/neutron/plugins/ml2/ml2_conf.ini" }
+    - { index: "~/.executed-neutron-41", group: "ml2", key: "mechanism_drivers", value: "openvswitch", target: "/etc/neutron/plugins/ml2/ml2_conf.ini" }
+    - { index: "~/.executed-neutron-42", group: "ml2_type_gre", key: "tunnel_id_ranges", value: "1:1000", target: "/etc/neutron/plugins/ml2/ml2_conf.ini" }
+    - { index: "~/.executed-neutron-43", group: "ovs", key: "local_ip", value: "{{ INSTANCE_TUNNELS_INTERFACE_IP_ADDRESS }}", target: "/etc/neutron/plugins/ml2/ml2_conf.ini" }
+    - { index: "~/.executed-neutron-44", group: "ovs", key: "tunnel_type", value: "gre", target: "/etc/neutron/plugins/ml2/ml2_conf.ini" }
+    - { index: "~/.executed-neutron-45", group: "ovs", key: "enable_tunneling", value: "True", target: "/etc/neutron/plugins/ml2/ml2_conf.ini" }
+    - { index: "~/.executed-neutron-46", group: "securitygroup", key: "firewall_driver", value: "neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver", target: "/etc/neutron/plugins/ml2/ml2_conf.ini" }
+    - { index: "~/.executed-neutron-47", group: "securitygroup", key: "enable_security_group", value: "True", target: "/etc/neutron/plugins/ml2/ml2_conf.ini" }
   tags: neutron
 
-- shell: openstack-config --set /etc/neutron/metadata_agent.ini DEFAULT auth_url http://controller:5000/v2.0 && touch ~/.executed-neutron-27 creates=~/.executed-neutron-27
-  tags: neutron
-- shell: openstack-config --set /etc/neutron/metadata_agent.ini DEFAULT auth_region regionOne && touch ~/.executed-neutron-28 creates=~/.executed-neutron-28
-  tags: neutron
-- shell: openstack-config --set /etc/neutron/metadata_agent.ini DEFAULT admin_tenant_name service && touch ~/.executed-neutron-29 creates=~/.executed-neutron-29
-  tags: neutron
-- shell: openstack-config --set /etc/neutron/metadata_agent.ini DEFAULT admin_user neutron && touch ~/.executed-neutron-30 creates=~/.executed-neutron-30
-  tags: neutron
-- shell: openstack-config --set /etc/neutron/metadata_agent.ini DEFAULT admin_password {{ NEUTRON_PASS }} && touch ~/.executed-neutron-31 creates=~/.executed-neutron-31
-  tags: neutron
-- shell: openstack-config --set /etc/neutron/metadata_agent.ini DEFAULT nova_metadata_ip controller && touch ~/.executed-neutron-32 creates=~/.executed-neutron-32
-  tags: neutron
-- shell: openstack-config --set /etc/neutron/metadata_agent.ini DEFAULT metadata_proxy_shared_secret {{ METADATA_SECRET }} && touch ~/.executed-neutron-33 creates=~/.executed-neutron-33
-  tags: neutron
-- shell: openstack-config --set /etc/neutron/metadata_agent.ini DEFAULT verbose True && touch ~/.executed-neutron-34 creates=~/.executed-neutron-34
-  tags: neutron
-
-- shell: openstack-config --set /etc/neutron/plugins/ml2/ml2_conf.ini ml2 type_drivers gre && touch ~/.executed-neutron-37 creates=~/.executed-neutron-37
-  tags: neutron
-- shell: openstack-config --set /etc/neutron/plugins/ml2/ml2_conf.ini ml2 tenant_network_types gre && touch ~/.executed-neutron-38 creates=~/.executed-neutron-38
-  tags: neutron
-- shell: openstack-config --set /etc/neutron/plugins/ml2/ml2_conf.ini ml2 mechanism_drivers openvswitch && touch ~/.executed-neutron-39 creates=~/.executed-neutron-39
-  tags: neutron
-- shell: openstack-config --set /etc/neutron/plugins/ml2/ml2_conf.ini ml2_type_gre tunnel_id_ranges 1:1000 && touch ~/.executed-neutron-40 creates=~/.executed-neutron-40
-  tags: neutron
-- shell: openstack-config --set /etc/neutron/plugins/ml2/ml2_conf.ini ovs local_ip {{ instance_tunnels_interface_ip_address }} && touch ~/.executed-neutron-41.0 creates=~/.executed-neutron-41.0
-  tags: neutron
-
-- shell: openstack-config --set /etc/neutron/plugins/ml2/ml2_conf.ini ovs tunnel_type gre && touch ~/.executed-neutron-42 creates=~/.executed-neutron-42
-  tags: neutron
-- shell: openstack-config --set /etc/neutron/plugins/ml2/ml2_conf.ini ovs enable_tunneling True && touch ~/.executed-neutron-43 creates=~/.executed-neutron-43
-  tags: neutron
-- shell: openstack-config --set /etc/neutron/plugins/ml2/ml2_conf.ini securitygroup firewall_driver neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver && touch ~/.executed-neutron-44 creates=~/.executed-neutron-44
-  tags: neutron
-- shell: openstack-config --set /etc/neutron/plugins/ml2/ml2_conf.ini securitygroup enable_security_group True && touch ~/.executed-neutron-45 creates=~/.executed-neutron-45
+- shell: "{{ item.command }} && touch {{ item.index }} creates={{ item.index }}"
+  with_items:
+    - { index: "~/.executed-neutron-51", command: "sed -i 's/^service_provider=/#service_provider=/g' /etc/neutron/neutron.conf" }
   tags: neutron
 
 - service: name={{ item }} state=running enabled=yes
@@ -106,21 +67,15 @@
     - openvswitch
   tags: neutron
 
-- shell: ovs-vsctl add-br br-int && touch ~/.executed-neutron-46 creates=~/.executed-neutron-46
-  tags: neutron
-
-- shell: ovs-vsctl add-br br-ex && touch ~/.executed-neutron-47 creates=~/.executed-neutron-47
-  tags: neutron
-- shell: ovs-vsctl add-port br-ex {{ interface_name }} && touch ~/.executed-neutron-48 creates=~/.executed-neutron-48
-  tags: neutron
-- shell: ethtool -K {{ interface_name }} gro off && touch ~/.executed-neutron-49 creates=~/.executed-neutron-49
-  tags: neutron
-- shell: ln -s plugins/ml2/ml2_conf.ini /etc/neutron/plugin.ini && touch ~/.executed-neutron-50 creates=~/.executed-neutron-50
-  tags: neutron
-
-- shell: cp /etc/init.d/neutron-openvswitch-agent /etc/init.d/neutron-openvswitch-agent.orig && touch ~/.executed-neutron-51 creates=~/.executed-neutron-50
-  tags: neutron
-- shell: sed -i 's,plugins/openvswitch/ovs_neutron_plugin.ini,plugin.ini,g' /etc/init.d/neutron-openvswitch-agent && touch ~/.executed-neutron-52 creates=~/.executed-neutron-52
+- shell: "{{ item.command }} && touch {{ item.index }} creates={{ item.index }}"
+  with_items:
+    - { index: "~/.executed-neutron-61", command: "ovs-vsctl add-br br-int" }
+    - { index: "~/.executed-neutron-62", command: "ovs-vsctl add-br br-ex" }
+    - { index: "~/.executed-neutron-63", command: "ovs-vsctl add-port br-ex {{ interface_name }}" }
+    - { index: "~/.executed-neutron-64", command: "ethtool -K {{ interface_name }} gro off" }
+    - { index: "~/.executed-neutron-65", command: "ln -s /etc/neutron/plugins/ml2/ml2_conf.ini /etc/neutron/plugin.ini" }
+    - { index: "~/.executed-neutron-66", command: "cp /etc/init.d/neutron-openvswitch-agent /etc/init.d/neutron-openvswitch-agent.orig" }
+    - { index: "~/.executed-neutron-67", command: "sed -i 's,plugins/openvswitch/ovs_neutron_plugin.ini,plugin.ini,g' /etc/init.d/neutron-openvswitch-agent" }
   tags: neutron
 
 - service: name={{ item }} state=running enabled=yes

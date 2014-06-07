@@ -1,0 +1,91 @@
+---
+- yum: name={{ item }} state=installed
+  with_items:
+    - openstack-trove
+    - openstack-trove-api
+    - openstack-trove-common
+    - openstack-trove-conductor
+    - openstack-trove-guestagent
+    - openstack-trove-taskmanager
+    - python-trove
+    - python-troveclient
+  tags: trove
+
+- shell: "{{ item.command }} && touch {{ item.index }} creates={{ item.index }}"
+  with_items:
+    - { index: "~/.executed-trove-01", command: "cp /usr/share/trove/trove-dist-paste.ini /etc/trove/api-paste.ini" }
+  tags: trove
+
+- shell: openstack-config --set {{ item.target }} {{ item.group }} {{ item.key }} {{ item.value }} && touch {{ item.index }} creates={{ item.index }}
+  with_items:
+    - { index: "~/.executed-trove-11", group: "DEFAULT", key: "log_dir", value: "/var/log/trove", target: "/etc/trove/trove.conf" }
+    - { index: "~/.executed-trove-12", group: "DEFAULT", key: "trove_auth_url", value: "http://controller:5000/v2.0", target: "/etc/trove/trove.conf" }
+    - { index: "~/.executed-trove-13", group: "DEFAULT", key: "nova_compute_url", value: "http://controller:8774/v2", target: "/etc/trove/trove.conf" }
+    - { index: "~/.executed-trove-14", group: "DEFAULT", key: "cinder_url", value: "http://controller:8776/v1", target: "/etc/trove/trove.conf" }
+    - { index: "~/.executed-trove-15", group: "DEFAULT", key: "swift_url", value: "http://controller:8080/v1/AUTH_", target: "/etc/trove/trove.conf" }
+    - { index: "~/.executed-trove-16", group: "DEFAULT", key: "sql_connection", value: "mysql://trove:{{ TROVE_DBPASS }}@controller/trove", target: "/etc/trove/trove.conf" }
+    - { index: "~/.executed-trove-17", group: "DEFAULT", key: "notifier_queue_hostname", value: "controller", target: "/etc/trove/trove.conf" }
+    - { index: "~/.executed-trove-18", group: "DEFAULT", key: "default_datastore", value: "mysql", target: "/etc/trove/trove.conf" }
+    - { index: "~/.executed-trove-19", group: "DEFAULT", key: "add_addresses", value: "True", target: "/etc/trove/trove.conf" }
+    - { index: "~/.executed-trove-20", group: "DEFAULT", key: "network_label_regex", value: "^demo-net$", target: "/etc/trove/trove.conf" }
+    - { index: "~/.executed-trove-21", group: "DEFAULT", key: "api_paste_config", value: "/etc/trove/api-paste.ini", target: "/etc/trove/trove.conf" }
+
+    - { index: "~/.executed-trove-31", group: "DEFAULT", key: "log_dir", value: "/var/log/trove", target: "/etc/trove/trove-taskmanager.conf" }
+    - { index: "~/.executed-trove-32", group: "DEFAULT", key: "trove_auth_url", value: "http://controller:5000/v2.0", target: "/etc/trove/trove-taskmanager.conf" }
+    - { index: "~/.executed-trove-33", group: "DEFAULT", key: "nova_compute_url", value: "http://controller:8774/v2", target: "/etc/trove/trove-taskmanager.conf" }
+    - { index: "~/.executed-trove-34", group: "DEFAULT", key: "cinder_url", value: "http://controller:8776/v1", target: "/etc/trove/trove-taskmanager.conf" }
+    - { index: "~/.executed-trove-35", group: "DEFAULT", key: "swift_url", value: "http://controller:8080/v1/AUTH_", target: "/etc/trove/trove-taskmanager.conf" }
+    - { index: "~/.executed-trove-36", group: "DEFAULT", key: "sql_connection", value: "mysql://trove:{{ TROVE_DBPASS }}@controller/trove", target: "/etc/trove/trove-taskmanager.conf" }
+    - { index: "~/.executed-trove-37", group: "DEFAULT", key: "notifier_queue_hostname", value: "controller", target: "/etc/trove/trove-taskmanager.conf" }
+    - { index: "~/.executed-trove-38", group: "DEFAULT", key: "nova_proxy_admin_user", value: "admin", target: "/etc/trove/trove-taskmanager.conf" }
+    - { index: "~/.executed-trove-39", group: "DEFAULT", key: "nova_proxy_admin_pass", value: "{{ ADMIN_PASS }}", target: "/etc/trove/trove-taskmanager.conf" }
+    - { index: "~/.executed-trove-40", group: "DEFAULT", key: "nova_proxy_admin_tenant_name", value: "service", target: "/etc/trove/trove-taskmanager.conf" }
+
+    - { index: "~/.executed-trove-51", group: "DEFAULT", key: "log_dir", value: "/var/log/trove", target: "/etc/trove/trove-conductor.conf" }
+    - { index: "~/.executed-trove-52", group: "DEFAULT", key: "trove_auth_url", value: "http://controller:5000/v2.0", target: "/etc/trove/trove-conductor.conf" }
+    - { index: "~/.executed-trove-53", group: "DEFAULT", key: "nova_compute_url", value: "http://controller:8774/v2", target: "/etc/trove/trove-conductor.conf" }
+    - { index: "~/.executed-trove-54", group: "DEFAULT", key: "cinder_url", value: "http://controller:8776/v1", target: "/etc/trove/trove-conductor.conf" }
+    - { index: "~/.executed-trove-55", group: "DEFAULT", key: "swift_url", value: "http://controller:8080/v1/AUTH_", target: "/etc/trove/trove-conductor.conf" }
+    - { index: "~/.executed-trove-56", group: "DEFAULT", key: "sql_connection", value: "mysql://trove:{{ TROVE_DBPASS }}@controller/trove", target: "/etc/trove/trove-conductor.conf" }
+    - { index: "~/.executed-trove-57", group: "DEFAULT", key: "notifier_queue_hostname", value: "controller", target: "/etc/trove/trove-conductor.conf" }
+    - { index: "~/.executed-trove-58", group: "DEFAULT", key: "rpc_backend", value: "qpid", target: "/etc/trove/trove-conductor.conf" }
+    - { index: "~/.executed-trove-59", group: "DEFAULT", key: "qpid_hostname", value: "controller", target: "/etc/trove/trove-conductor.conf" }
+
+    # - { index: "~/.executed-trove-41", group: "DEFAULT", key: "rpc_backend", value: "qpid", target: "/etc/trove/trove-api.conf" }
+    # - { index: "~/.executed-trove-42", group: "DEFAULT", key: "qpid_hostname", value: "controller", target: "/etc/trove/trove-api.conf" }
+
+    # - { index: "~/.executed-trove-61", group: "DEFAULT", key: "rpc_backend", value: "qpid", target: "/etc/trove/trove-taskmaster.conf" }
+    # - { index: "~/.executed-trove-62", group: "DEFAULT", key: "qpid_hostname", value: "controller", target: "/etc/trove/trove-taskmaster.conf" }
+
+    - { index: "~/.executed-trove-61", group: "filter:authtoken", key: "auth_host", value: "controller", target: "/etc/trove/api-paste.ini" }
+    - { index: "~/.executed-trove-62", group: "filter:authtoken", key: "auth_port", value: "35357", target: "/etc/trove/api-paste.ini" }
+    - { index: "~/.executed-trove-63", group: "filter:authtoken", key: "auth_protocol", value: "http", target: "/etc/trove/api-paste.ini" }
+    - { index: "~/.executed-trove-64", group: "filter:authtoken", key: "identity_uri", value: "http://controller:35357", target: "/etc/trove/api-paste.ini" }
+    - { index: "~/.executed-trove-65", group: "filter:authtoken", key: "admin_user", value: "trove", target: "/etc/trove/api-paste.ini" }
+    - { index: "~/.executed-trove-66", group: "filter:authtoken", key: "admin_password", value: "{{ ADMIN_PASS }}", target: "/etc/trove/api-paste.ini" }
+    - { index: "~/.executed-trove-67", group: "filter:authtoken", key: "admin_token", value: "{{ ADMIN_TOKEN }}", target: "/etc/trove/api-paste.ini" }
+    - { index: "~/.executed-trove-68", group: "filter:authtoken", key: "admin_tenant_name", value: "service", target: "/etc/trove/api-paste.ini" }
+    - { index: "~/.executed-trove-69", group: "filter:authtoken", key: "signing_dir", value: "/var/cache/trove", target: "/etc/trove/api-paste.ini" }
+
+    - { index: "~/.executed-trove-71", group: "DEFAULT", key: "rpc_backend", value: "qpid", target: "/etc/trove/trove-guestagent.conf" }
+    - { index: "~/.executed-trove-72", group: "DEFAULT", key: "qpid_host", value: "controller", target: "/etc/trove/trove-guestagent.conf" }
+    - { index: "~/.executed-trove-73", group: "DEFAULT", key: "nova_proxy_admin_user", value: "admin", target: "/etc/trove/trove-guestagent.conf" }
+    - { index: "~/.executed-trove-74", group: "DEFAULT", key: "nova_proxy_admin_pass", value: "{{ ADMIN_PASS }}", target: "/etc/trove/trove-guestagent.conf" }
+    - { index: "~/.executed-trove-75", group: "DEFAULT", key: "nova_proxy_admin_tenant_name", value: "service", target: "/etc/trove/trove-guestagent.conf" }
+    - { index: "~/.executed-trove-76", group: "DEFAULT", key: "trove_auth_url", value: "http://controller:35357/v2.0", target: "/etc/trove/trove-guestagent.conf" }
+
+  tags: trove
+
+- shell: "{{ item.command }} && touch {{ item.index }} creates={{ item.index }}"
+  with_items:
+    - { index: "~/.executed-trove-81", command: "su -s /bin/sh -c \"trove-manage db_sync\" trove" }
+    - { index: "~/.executed-trove-82", command: "su -s /bin/sh -c \"trove-manage datastore_update mysql ''\" trove" }
+    - { index: "~/.executed-trove-83", command: "trove-manage --config-file=/etc/trove/trove.conf datastore_version_update mysql mysql-5.5 mysql glance_image_ID mysql-server-5.5 1" }
+  tags: trove
+
+- service: name={{ item }} state=running enabled=yes
+  with_items: 
+    - openstack-trove-api
+    - openstack-trove-taskmanager
+    - openstack-trove-conductor
+  tags: trove

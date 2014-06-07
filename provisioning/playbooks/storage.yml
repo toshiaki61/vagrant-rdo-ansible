@@ -1,5 +1,0 @@
----
-- hosts: storage-node
-  sudo: yes
-  roles:
-    - ../roles/storage

@@ -1,5 +1,0 @@
----
-- hosts: proxy-node
-  sudo: yes
-  roles:
-    - ../roles/proxy

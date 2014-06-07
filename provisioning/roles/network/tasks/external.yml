@@ -1,8 +1,11 @@
 ---
-- shell: cat /vagrant/provisioning/roles/network/files/bridge | sudo tee -a /etc/sysconfig/network-scripts/ifcfg-{{ interface_name }} && touch ~/.executed-external-1 creates=~/.executed-external-1
+- copy: src=bridge dest=/tmp/bridge
   tags: external
 
-- shell: echo 'DEVICE={{ interface_name }}' | sudo tee -a /etc/sysconfig/network-scripts/ifcfg-{{ interface_name }} && touch ~/.executed-external-2 creates=~/.executed-external-2
+- shell: "{{ item.command }} && touch {{ item.index }} creates={{ item.index }}"
+  with_items:
+    - { index: "~/.executed-external-01", command: "cat /tmp/bridge | sudo tee -a /etc/sysconfig/network-scripts/ifcfg-{{ interface_name }}" }
+    - { index: "~/.executed-external-02", command: "echo 'DEVICE={{ interface_name }}' | sudo tee -a /etc/sysconfig/network-scripts/ifcfg-{{ interface_name }}" }
   tags: external
 
 - service: name=network state=restarted

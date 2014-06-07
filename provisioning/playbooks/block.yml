@@ -1,5 +1,0 @@
----
-- hosts: block-node
-  sudo: yes
-  roles:
-    - ../roles/block

@@ -1,0 +1,64 @@
+---
+- yum: name={{ item }} state=installed
+  with_items:
+    - openstack-ceilometer-api
+    - openstack-ceilometer-collector
+    - openstack-ceilometer-notification
+    - openstack-ceilometer-central
+    - openstack-ceilometer-alarm
+    - python-ceilometerclient
+  tags: ceilometer
+
+- yum: name={{ item }} state=installed
+  with_items:
+    - mongodb-server
+    - mongodb
+  tags: ceilometer
+
+- shell: "{{ item.command }} && touch {{ item.index }} creates={{ item.index }}"
+  with_items:
+    - { index: "~/.executed-ceilometer-01", command: "sed -i 's/^bind_ip =.*/bind_ip = 10.0.0.11/g' /etc/mongodb.conf" }
+  tags: ceilometer
+
+- service: name={{ item }} state=running enabled=yes
+  with_items: 
+    - mongod
+  tags: ceilometer
+
+- wait_for: host=10.0.0.11 port=27017 delay=10
+  tags: ceilometer
+
+- shell: "{{ item.command }} && touch {{ item.index }} creates={{ item.index }}"
+  with_items:
+    - { index: "~/.executed-ceilometer-11", command: "mongo --host 10.0.0.11 --eval 'db = db.getSiblingDB(\"ceilometer\"); db.addUser({user: \"ceilometer\", pwd: \"{{ CEILOMETER_DBPASS }}\", roles: [ \"readWrite\", \"dbAdmin\" ]})'" }
+  tags: ceilometer
+
+- shell: openstack-config --set {{ item.target }} {{ item.group }} {{ item.key }} {{ item.value }} && touch {{ item.index }} creates={{ item.index }}
+  with_items:
+    - { index: "~/.executed-ceilometer-21", group: "database", key: "connection", value: "mongodb://ceilometer:{{ CEILOMETER_DBPASS }}@controller:27017/ceilometer", target: "/etc/ceilometer/ceilometer.conf" }
+    - { index: "~/.executed-ceilometer-22", group: "publisher", key: "metering_secret", value: "{{ CEILOMETER_TOKEN }}", target: "/etc/ceilometer/ceilometer.conf" }
+    - { index: "~/.executed-ceilometer-23", group: "DEFAULT", key: "rpc_backend", value: "ceilometer.openstack.common.rpc.impl_qpid", target: "/etc/ceilometer/ceilometer.conf" }
+    - { index: "~/.executed-ceilometer-24", group: "DEFAULT", key: "auth_strategy", value: "keystone", target: "/etc/ceilometer/ceilometer.conf" }
+    - { index: "~/.executed-ceilometer-25", group: "keystone_authtoken", key: "identity_uri", value: "http://controller:35357", target: "/etc/ceilometer/ceilometer.conf" }
+    - { index: "~/.executed-ceilometer-26", group: "keystone_authtoken", key: "auth_host", value: "controller", target: "/etc/ceilometer/ceilometer.conf" }
+    - { index: "~/.executed-ceilometer-27", group: "keystone_authtoken", key: "auth_protocol", value: "http", target: "/etc/ceilometer/ceilometer.conf" }
+    - { index: "~/.executed-ceilometer-38", group: "keystone_authtoken", key: "auth_uri", value: "http://controller:5000", target: "/etc/ceilometer/ceilometer.conf" }
+    - { index: "~/.executed-ceilometer-29", group: "keystone_authtoken", key: "admin_user", value: "ceilometer", target: "/etc/ceilometer/ceilometer.conf" }
+    - { index: "~/.executed-ceilometer-30", group: "keystone_authtoken", key: "admin_tenant_name", value: "service", target: "/etc/ceilometer/ceilometer.conf" }
+    - { index: "~/.executed-ceilometer-31", group: "keystone_authtoken", key: "admin_password", value: "{{ CEILOMETER_PASS }}", target: "/etc/ceilometer/ceilometer.conf" }
+    - { index: "~/.executed-ceilometer-32", group: "service_credentials", key: "os_auth_url", value: "http://controller:5000/v2.0", target: "/etc/ceilometer/ceilometer.conf" }
+    - { index: "~/.executed-ceilometer-33", group: "service_credentials", key: "os_username", value: "ceilometer", target: "/etc/ceilometer/ceilometer.conf" }
+    - { index: "~/.executed-ceilometer-34", group: "service_credentials", key: "os_tenant_name", value: "service", target: "/etc/ceilometer/ceilometer.conf" }
+    - { index: "~/.executed-ceilometer-35", group: "service_credentials", key: "os_password", value: "{{ CEILOMETER_PASS }}", target: "/etc/ceilometer/ceilometer.conf" }
+  tags: ceilometer
+
+- service: name={{ item }} state=running enabled=yes
+  with_items: 
+    - openstack-ceilometer-api
+    - openstack-ceilometer-notification
+    - openstack-ceilometer-central
+    - openstack-ceilometer-collector
+    - openstack-ceilometer-alarm-evaluator
+    - openstack-ceilometer-alarm-notifier
+  tags: ceilometer
+

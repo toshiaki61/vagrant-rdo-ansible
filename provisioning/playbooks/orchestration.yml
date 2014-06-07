@@ -1,5 +1,0 @@
----
-- hosts: orchestration-node
-  sudo: yes
-  roles:
-    - ../roles/orchestration
