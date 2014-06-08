@@ -10,32 +10,35 @@
     - { index: "~/.executed-glance-01", group: "database", key: "connection", value: "mysql://glance:{{ GLANCE_DBPASS }}@controller/glance", target: "/etc/glance/glance-api.conf" }
     - { index: "~/.executed-glance-02", group: "DEFAULT", key: "rpc_backend", value: "qpid", target: "/etc/glance/glance-api.conf" }
     - { index: "~/.executed-glance-03", group: "DEFAULT", key: "notification_driver", value: "messaging", target: "/etc/glance/glance-api.conf" }
-    - { index: "~/.executed-glance-04", group: "DEFAULT", key: "qpid_hostname", value: "controller", target: "/etc/glance/glance-api.conf" }
+    - { index: "~/.executed-glance-04", group: "DEFAULT", key: "qpid_hostname", value: "10.0.0.11", target: "/etc/glance/glance-api.conf" }
     - { index: "~/.executed-glance-05", group: "DEFAULT", key: "default_store", value: "swift", target: "/etc/glance/glance-api.conf" }
     - { index: "~/.executed-glance-06", group: "DEFAULT", key: "known_stores", value: "glance.store.filesystem.Store,glance.store.http.Store,glance.store.swift.Store", target: "/etc/glance/glance-api.conf" }
-    - { index: "~/.executed-glance-07", group: "DEFAULT", key: "swift_store_auth_address", value: "http://controller:5000/v2.0/", target: "/etc/glance/glance-api.conf" }
-    - { index: "~/.executed-glance-08", group: "DEFAULT", key: "swift_store_user", value: "service:swift", target: "/etc/glance/glance-api.conf" }
-    - { index: "~/.executed-glance-09", group: "DEFAULT", key: "swift_store_key", value: "{{ SWIFT_PASS }}", target: "/etc/glance/glance-api.conf" }
-    - { index: "~/.executed-glance-10", group: "DEFAULT", key: "swift_store_create_container_on_put", value: "True", target: "/etc/glance/glance-api.conf" }
-    - { index: "~/.executed-glance-11", group: "keystone_authtoken", key: "identity_uri", value: "http://controller:35357", target: "/etc/glance/glance-api.conf" }
-    - { index: "~/.executed-glance-12", group: "keystone_authtoken", key: "auth_uri", value: "http://controller:5000", target: "/etc/glance/glance-api.conf" }
+    - { index: "~/.executed-glance-07", group: "DEFAULT", key: "swift_store_auth_version", value: "2", target: "/etc/glance/glance-api.conf" }
+    - { index: "~/.executed-glance-08", group: "DEFAULT", key: "swift_store_auth_address", value: "http://10.0.0.11:5000/v2.0/", target: "/etc/glance/glance-api.conf" }
+    - { index: "~/.executed-glance-09", group: "DEFAULT", key: "swift_store_user", value: "service:swift", target: "/etc/glance/glance-api.conf" }
+    - { index: "~/.executed-glance-10", group: "DEFAULT", key: "swift_store_key", value: "{{ SWIFT_PASS }}", target: "/etc/glance/glance-api.conf" }
+    - { index: "~/.executed-glance-11", group: "DEFAULT", key: "swift_store_container", value: "glance", target: "/etc/glance/glance-api.conf" }
+    - { index: "~/.executed-glance-12", group: "DEFAULT", key: "swift_store_create_container_on_put", value: "True", target: "/etc/glance/glance-api.conf" }
+    - { index: "~/.executed-glance-13", group: "keystone_authtoken", key: "identity_uri", value: "http://controller:35357", target: "/etc/glance/glance-api.conf" }
+    - { index: "~/.executed-glance-14", group: "keystone_authtoken", key: "auth_uri", value: "http://controller:5000", target: "/etc/glance/glance-api.conf" }
     # - { index: "~/.executed-glance-06", group: "keystone_authtoken", key: "auth_host", value: "controller", target: "/etc/glance/glance-api.conf" }
     # - { index: "~/.executed-glance-07", group: "keystone_authtoken", key: "auth_port", value: "35357", target: "/etc/glance/glance-api.conf" }
     # - { index: "~/.executed-glance-08", group: "keystone_authtoken", key: "auth_protocol", value: "http", target: "/etc/glance/glance-api.conf" }
-    - { index: "~/.executed-glance-13", group: "keystone_authtoken", key: "admin_tenant_name", value: "service", target: "/etc/glance/glance-api.conf" }
-    - { index: "~/.executed-glance-14", group: "keystone_authtoken", key: "admin_user", value: "glance", target: "/etc/glance/glance-api.conf" }
-    - { index: "~/.executed-glance-15", group: "keystone_authtoken", key: "admin_password", value: "{{ GLANCE_PASS }}", target: "/etc/glance/glance-api.conf" }
-    - { index: "~/.executed-glance-16", group: "paste_deploy", key: "flavor", value: "keystone", target: "/etc/glance/glance-api.conf" }
-    - { index: "~/.executed-glance-17", group: "database", key: "connection", value: "mysql://glance:{{ GLANCE_DBPASS }}@controller/glance", target: "/etc/glance/glance-registry.conf" }
-    - { index: "~/.executed-glance-18", group: "keystone_authtoken", key: "identity_uri", value: "http://controller:35357", target: "/etc/glance/glance-registry.conf" }
-    - { index: "~/.executed-glance-19", group: "keystone_authtoken", key: "auth_uri", value: "http://controller:5000", target: "/etc/glance/glance-registry.conf" }
+    - { index: "~/.executed-glance-15", group: "keystone_authtoken", key: "admin_tenant_name", value: "service", target: "/etc/glance/glance-api.conf" }
+    - { index: "~/.executed-glance-16", group: "keystone_authtoken", key: "admin_user", value: "glance", target: "/etc/glance/glance-api.conf" }
+    - { index: "~/.executed-glance-17", group: "keystone_authtoken", key: "admin_password", value: "{{ GLANCE_PASS }}", target: "/etc/glance/glance-api.conf" }
+    - { index: "~/.executed-glance-18", group: "paste_deploy", key: "flavor", value: "keystone", target: "/etc/glance/glance-api.conf" }
+
+    - { index: "~/.executed-glance-21", group: "database", key: "connection", value: "mysql://glance:{{ GLANCE_DBPASS }}@controller/glance", target: "/etc/glance/glance-registry.conf" }
+    - { index: "~/.executed-glance-22", group: "keystone_authtoken", key: "identity_uri", value: "http://controller:35357", target: "/etc/glance/glance-registry.conf" }
+    - { index: "~/.executed-glance-23", group: "keystone_authtoken", key: "auth_uri", value: "http://controller:5000", target: "/etc/glance/glance-registry.conf" }
     # - { index: "~/.executed-glance-15", group: "keystone_authtoken", key: "auth_host", value: "controller", target: "/etc/glance/glance-registry.conf" }
     # - { index: "~/.executed-glance-16", group: "keystone_authtoken", key: "auth_port", value: "35357", target: "/etc/glance/glance-registry.conf" }
     # - { index: "~/.executed-glance-17", group: "keystone_authtoken", key: "auth_protocol", value: "http", target: "/etc/glance/glance-registry.conf" }
-    - { index: "~/.executed-glance-20", group: "keystone_authtoken", key: "admin_tenant_name", value: "service", target: "/etc/glance/glance-registry.conf" }
-    - { index: "~/.executed-glance-21", group: "keystone_authtoken", key: "admin_user", value: "glance", target: "/etc/glance/glance-registry.conf" }
-    - { index: "~/.executed-glance-22", group: "keystone_authtoken", key: "admin_password", value: "{{ GLANCE_PASS }}", target: "/etc/glance/glance-registry.conf" }
-    - { index: "~/.executed-glance-23", group: "paste_deploy", key: "flavor", value: "keystone", target: "/etc/glance/glance-registry.conf" }
+    - { index: "~/.executed-glance-24", group: "keystone_authtoken", key: "admin_tenant_name", value: "service", target: "/etc/glance/glance-registry.conf" }
+    - { index: "~/.executed-glance-25", group: "keystone_authtoken", key: "admin_user", value: "glance", target: "/etc/glance/glance-registry.conf" }
+    - { index: "~/.executed-glance-26", group: "keystone_authtoken", key: "admin_password", value: "{{ GLANCE_PASS }}", target: "/etc/glance/glance-registry.conf" }
+    - { index: "~/.executed-glance-27", group: "paste_deploy", key: "flavor", value: "keystone", target: "/etc/glance/glance-registry.conf" }
   tags: glance
 
 - shell: "{{ item.command }} && touch {{ item.index }} creates={{ item.index }}"

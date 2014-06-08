@@ -30,7 +30,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     box.vm.network :forwarded_port, guest: 80, host: 8080
     box.vm.network :forwarded_port, guest: 443, host: 8443
     box.vm.provider :virtualbox do |vbox|
-      vbox.customize ["modifyvm", :id, "--memory", "2048"]
+      vbox.customize ["modifyvm", :id, "--memory", "4096"]
       
       file_to_disk = "./tmp/controller.vdi"
       if not File.exist?(file_to_disk) then

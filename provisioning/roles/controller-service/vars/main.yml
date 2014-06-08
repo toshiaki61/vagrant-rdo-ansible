@@ -56,6 +56,7 @@ KEYSTONE_USER_ROLES:
   - { index: "~/.executed-keystone-user-role-07", user: ceilometer, role: admin }
   - { index: "~/.executed-keystone-user-role-08", user: trove, role: admin }
   - { index: "~/.executed-keystone-user-role-09", user: ceilometer, role: ResellerAdmin }
+  - { index: "~/.executed-keystone-user-role-10", user: glance, role: ResellerAdmin }
 
 KEYSTONE_SERVICES:
   - { index: "~/.executed-keystone-service-01", name: glance, type: image, description: "OpenStack Image Service" }

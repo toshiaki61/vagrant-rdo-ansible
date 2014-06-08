@@ -31,6 +31,9 @@
 - shell: "{{ item.command }} && touch {{ item.index }} creates={{ item.index }}"
   with_items:
     - { index: "~/.executed-ceilometer-11", command: "mongo --host 10.0.0.11 --eval 'db = db.getSiblingDB(\"ceilometer\"); db.addUser({user: \"ceilometer\", pwd: \"{{ CEILOMETER_DBPASS }}\", roles: [ \"readWrite\", \"dbAdmin\" ]})'" }
+    - { index: "~/.executed-ceilometer-12", command: "usermod -g ceilometer -G swift swift" }
+    - { index: "~/.executed-ceilometer-13", command: "chown -R ceilometer:ceilometer /var/log/ceilometer" }
+    - { index: "~/.executed-ceilometer-14", command: "chmod g=rxw /var/log/ceilometer" }
   tags: ceilometer
 
 - shell: openstack-config --set {{ item.target }} {{ item.group }} {{ item.key }} {{ item.value }} && touch {{ item.index }} creates={{ item.index }}

@@ -29,8 +29,8 @@
 - shell: "{{ item.command }} && touch {{ item.index }} creates={{ item.index }}"
   with_items:
     - { index: "~/.executed-keystone-21", command: "(sudo crontab -l 2>&1 | grep -q token_flush) || echo '@hourly /usr/bin/keystone-manage token_flush >/var/log/keystone/keystone-tokenflush.log 2>&1' | sudo tee -a /var/spool/cron/root" }
-    - { index: "~/.executed-keystone-22", command: "cat /tmp/keystonerc | sed 's/$KEYSTONE_USERNAME/admin/g' | sed 's/$KEYSTONE_PASSWORD/{{ ADMIN_PASS }}/g' | sudo tee keystonerc_admin" }
-    - { index: "~/.executed-keystone-23", command: "cat /tmp/keystonerc | sed 's/$KEYSTONE_USERNAME/demo/g' | sed 's/$KEYSTONE_PASSWORD/{{ DEMO_PASS }}/g' | sudo tee keystonerc_demo" }
+    - { index: "~/.executed-keystone-22", command: "cat /tmp/keystonerc | sed 's/%KEYSTONE_USERNAME%/admin/g' | sed 's/%KEYSTONE_PASSWORD%/{{ ADMIN_PASS }}/g' | sudo tee keystonerc_admin" }
+    - { index: "~/.executed-keystone-23", command: "cat /tmp/keystonerc | sed 's/%KEYSTONE_USERNAME%/demo/g' | sed 's/%KEYSTONE_PASSWORD%/{{ DEMO_PASS }}/g' | sudo tee keystonerc_demo" }
   tags: keystone
 
 - shell: "{{ item.command }} && touch {{ item.index }} creates={{ item.index }}"

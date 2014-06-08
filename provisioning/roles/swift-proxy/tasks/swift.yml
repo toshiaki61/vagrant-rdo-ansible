@@ -7,11 +7,6 @@
     - python-keystone-auth-token
   tags: swift-proxy
 
-# - shell: "{{ item.command }} && touch {{ item.index }} creates={{ item.index }}"
-#   with_items:
-#     - { index: "~/.executed-swift-proxy-01", command: "sed -i 's/OPTIONS=.*/OPTIONS="-l {{ PROXY_LOCAL_NET_IP }}"/g' /etc/sysconfig/memcached" }
-#   tags: swift-proxy
-
 - service: name={{ item }} state=running enabled=yes
   with_items:
     - memcached
@@ -22,16 +17,15 @@
 
 - shell: "{{ item.command }} && touch {{ item.index }} creates={{ item.index }}"
   with_items:
-    - { index: "~/.executed-swift-proxy-11", command: "cat /tmp/proxy-server.conf | sed 's/$SWIFT_PASS/{{ SWIFT_PASS }}/g' | sudo tee /etc/swift/proxy-server.conf" }
+    - { index: "~/.executed-swift-proxy-11", command: "cat /tmp/proxy-server.conf | sed 's/%SWIFT_PASS%/{{ SWIFT_PASS }}/g' | sed 's/%PROXY_LOCAL_NET_IP%/{{ PROXY_LOCAL_NET_IP }}/g' | sudo tee /etc/swift/proxy-server.conf" }
   tags: swift-proxy
 
 - shell: openstack-config --set {{ item.target }} {{ item.group }} {{ item.key }} {{ item.value }} && touch {{ item.index }} creates={{ item.index }}
   with_items:
     - { index: "~/.executed-swift-proxy-21", group: "filter:ceilometer", key: "use", value: "egg:ceilometer#swift", target: "/etc/swift/proxy-server.conf" }
-    - { index: "~/.executed-swift-proxy-22", group: "pipeline:main", key: "pipeline", value: "healthcheck cache authtoken keystoneauth ceilometer proxy-server", target: "/etc/swift/proxy-server.conf" }
   tags: swift-proxy
 
-- shell: "{{ item.command }} && touch {{ item.index }} creates={{ item.index }}"
+- shell: "{{ item.command }} && touch {{ item.index }} creates={{ item.index }} chdir=/etc/swift"
   with_items:
     - { index: "~/.executed-swift-proxy-31", command: "mkdir -p /etc/swift/keystone-signing && chown -R swift:swift /etc/swift/keystone-signing" }
     - { index: "~/.executed-swift-proxy-32", command: "swift-ring-builder account.builder create 18 3 1 && swift-ring-builder container.builder create 18 3 1 && swift-ring-builder object.builder create 18 3 1" }

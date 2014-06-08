@@ -29,10 +29,11 @@
     - { index: "~/.executed-swift-storage-14", command: "mkdir -p /srv/node/sdb1" }
     - { index: "~/.executed-swift-storage-15", command: "mount -t xfs /dev/sdb1 /srv/node/sdb1" }
     - { index: "~/.executed-swift-storage-16", command: "chown -R swift:swift /srv/node" }
-    - { index: "~/.executed-swift-storage-17", command: "cat /tmp/rsyncd.conf | sed 's/$STORAGE_LOCAL_NET_IP/{{ STORAGE_LOCAL_NET_IP }}/g' | sudo tee /etc/rsyncd.conf" }
+    - { index: "~/.executed-swift-storage-17", command: "cat /tmp/rsyncd.conf | sed 's/%STORAGE_LOCAL_NET_IP%/{{ STORAGE_LOCAL_NET_IP }}/g' | sudo tee /etc/rsyncd.conf" }
     - { index: "~/.executed-swift-storage-18", command: "sed -i 's/disable.*/disable = false/g' /etc/xinetd.d/rsync" }
     - { index: "~/.executed-swift-storage-19", command: "sed -i 's/^bind_ip =.*/bind_ip = 0.0.0.0/g' /etc/swift/account-server.conf" }
-
+    - { index: "~/.executed-swift-storage-20", command: "sed -i 's/^bind_ip =.*/bind_ip = 0.0.0.0/g' /etc/swift/container-server.conf" }
+    - { index: "~/.executed-swift-storage-21", command: "sed -i 's/^bind_ip =.*/bind_ip = 0.0.0.0/g' /etc/swift/object-server.conf" }
   tags: swift-storage
 
 - service: name=xinetd state=running enabled=yes
@@ -40,8 +41,8 @@
 
 - shell: "{{ item.command }} && touch {{ item.index }} creates={{ item.index }}"
   with_items:
-    - { index: "~/.executed-swift-storage-21", command: "mkdir -p /var/swift/recon" }
-    - { index: "~/.executed-swift-storage-22", command: "chown -R swift:swift /var/swift/recon" }
+    - { index: "~/.executed-swift-storage-31", command: "mkdir -p /var/swift/recon" }
+    - { index: "~/.executed-swift-storage-32", command: "chown -R swift:swift /var/swift/recon" }
   tags: swift-storage
 
 - service: name={{ item }} state=running enabled=yes
@@ -58,4 +59,9 @@
     - openstack-swift-account-replicator
     - openstack-swift-account-reaper
     - openstack-swift-account-auditor
+  tags: swift-storage
+
+- shell: "{{ item.command }} && touch {{ item.index }} creates={{ item.index }}"
+  with_items:
+    - { index: "~/.executed-swift-storage-41", command: "swift-init all restart" }
   tags: swift-storage
