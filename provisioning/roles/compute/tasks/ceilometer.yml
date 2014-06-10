@@ -8,14 +8,14 @@
 
 - shell: openstack-config --set {{ item.target }} {{ item.group }} {{ item.key }} {{ item.value }} && touch {{ item.index }} creates={{ item.index }}
   with_items:
-    - { index: "~/.executed-ceilometer-compute-01", group: "DEFAULT", key: "instance_usage_audit", value: "True", target: "/etc/nova/nova.conf" }
-    - { index: "~/.executed-ceilometer-compute-02", group: "DEFAULT", key: "instance_usage_audit_period", value: "hour", target: "/etc/nova/nova.conf" }
-    - { index: "~/.executed-ceilometer-compute-03", group: "DEFAULT", key: "notify_on_state_change", value: "vm_and_task_state", target: "/etc/nova/nova.conf" }
+    - { index: "~/.executed/ceilometer-compute-01", group: "DEFAULT", key: "instance_usage_audit", value: "True", target: "/etc/nova/nova.conf" }
+    - { index: "~/.executed/ceilometer-compute-02", group: "DEFAULT", key: "instance_usage_audit_period", value: "hour", target: "/etc/nova/nova.conf" }
+    - { index: "~/.executed/ceilometer-compute-03", group: "DEFAULT", key: "notify_on_state_change", value: "vm_and_task_state", target: "/etc/nova/nova.conf" }
   tags: ceilometer-compute
 
 - shell: "{{ item.command }} && touch {{ item.index }} creates={{ item.index }}"
   with_items:
-    - { index: "~/.executed-ceilometer-compute-11", command: "sed -i 's/#notification_driver=.*/notification_driver = nova.openstack.common.notifier.rpc_notifier\\nnotification_driver = ceilometer.compute.nova_notifier/g' /etc/nova/nova.conf" }
+    - { index: "~/.executed/ceilometer-compute-11", command: "sed -i 's/#notification_driver=.*/notification_driver = nova.openstack.common.notifier.rpc_notifier\\nnotification_driver = ceilometer.compute.nova_notifier/g' /etc/nova/nova.conf" }
   tags: ceilometer-compute
 
 - service: name={{ item }} state=restarted
@@ -25,17 +25,17 @@
 
 - shell: openstack-config --set {{ item.target }} {{ item.group }} {{ item.key }} {{ item.value }} && touch {{ item.index }} creates={{ item.index }}
   with_items:
-    - { index: "~/.executed-ceilometer-compute-21", group: "publisher", key: "metering_secret", value: "{{ CEILOMETER_TOKEN }}", target: "/etc/ceilometer/ceilometer.conf" }
-    - { index: "~/.executed-ceilometer-compute-22", group: "DEFAULT", key: "qpid_hostname", value: "controller", target: "/etc/ceilometer/ceilometer.conf" }
-    - { index: "~/.executed-ceilometer-compute-23", group: "keystone_authtoken", key: "auth_host", value: "controller", target: "/etc/ceilometer/ceilometer.conf" }
-    - { index: "~/.executed-ceilometer-compute-24", group: "keystone_authtoken", key: "admin_user", value: "ceilometer", target: "/etc/ceilometer/ceilometer.conf" }
-    - { index: "~/.executed-ceilometer-compute-25", group: "keystone_authtoken", key: "admin_tenant_name", value: "service", target: "/etc/ceilometer/ceilometer.conf" }
-    - { index: "~/.executed-ceilometer-compute-26", group: "keystone_authtoken", key: "auth_protocol", value: "http", target: "/etc/ceilometer/ceilometer.conf" }
-    - { index: "~/.executed-ceilometer-compute-27", group: "keystone_authtoken", key: "admin_password", value: "{{ CEILOMETER_PASS }}", target: "/etc/ceilometer/ceilometer.conf" }
-    - { index: "~/.executed-ceilometer-compute-28", group: "service_credentials", key: "os_username", value: "ceilometer", target: "/etc/ceilometer/ceilometer.conf" }
-    - { index: "~/.executed-ceilometer-compute-29", group: "service_credentials", key: "os_tenant_name", value: "service", target: "/etc/ceilometer/ceilometer.conf" }
-    - { index: "~/.executed-ceilometer-compute-30", group: "service_credentials", key: "os_password", value: "{{ CEILOMETER_PASS }}", target: "/etc/ceilometer/ceilometer.conf" }
-    - { index: "~/.executed-ceilometer-compute-31", group: "service_credentials", key: "os_auth_url", value: "http://controller:5000/v2.0", target: "/etc/ceilometer/ceilometer.conf" }
+    - { index: "~/.executed/ceilometer-compute-21", group: "publisher", key: "metering_secret", value: "{{ CEILOMETER_TOKEN }}", target: "/etc/ceilometer/ceilometer.conf" }
+    - { index: "~/.executed/ceilometer-compute-22", group: "DEFAULT", key: "qpid_hostname", value: "controller", target: "/etc/ceilometer/ceilometer.conf" }
+    - { index: "~/.executed/ceilometer-compute-23", group: "keystone_authtoken", key: "auth_host", value: "controller", target: "/etc/ceilometer/ceilometer.conf" }
+    - { index: "~/.executed/ceilometer-compute-24", group: "keystone_authtoken", key: "admin_user", value: "ceilometer", target: "/etc/ceilometer/ceilometer.conf" }
+    - { index: "~/.executed/ceilometer-compute-25", group: "keystone_authtoken", key: "admin_tenant_name", value: "service", target: "/etc/ceilometer/ceilometer.conf" }
+    - { index: "~/.executed/ceilometer-compute-26", group: "keystone_authtoken", key: "auth_protocol", value: "http", target: "/etc/ceilometer/ceilometer.conf" }
+    - { index: "~/.executed/ceilometer-compute-27", group: "keystone_authtoken", key: "admin_password", value: "{{ CEILOMETER_PASS }}", target: "/etc/ceilometer/ceilometer.conf" }
+    - { index: "~/.executed/ceilometer-compute-28", group: "service_credentials", key: "os_username", value: "ceilometer", target: "/etc/ceilometer/ceilometer.conf" }
+    - { index: "~/.executed/ceilometer-compute-29", group: "service_credentials", key: "os_tenant_name", value: "service", target: "/etc/ceilometer/ceilometer.conf" }
+    - { index: "~/.executed/ceilometer-compute-30", group: "service_credentials", key: "os_password", value: "{{ CEILOMETER_PASS }}", target: "/etc/ceilometer/ceilometer.conf" }
+    - { index: "~/.executed/ceilometer-compute-31", group: "service_credentials", key: "os_auth_url", value: "http://controller:5000/v2.0", target: "/etc/ceilometer/ceilometer.conf" }
   tags: ceilometer-compute
 
 - service: name={{ item }} state=running enabled=yes

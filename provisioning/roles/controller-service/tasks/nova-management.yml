@@ -12,40 +12,40 @@
 
 - shell: openstack-config --set {{ item.target }} {{ item.group }} {{ item.key }} {{ item.value }} && touch {{ item.index }} creates={{ item.index }}
   with_items:
-    - { index: "~/.executed-nova-01", group: "database", key: "connection", value: "mysql://nova:{{ NOVA_DBPASS }}@controller/nova", target: "/etc/nova/nova.conf" }
-    - { index: "~/.executed-nova-02", group: "DEFAULT", key: "rpc_backend", value: "qpid", target: "/etc/nova/nova.conf" }
-    - { index: "~/.executed-nova-03", group: "DEFAULT", key: "qpid_hostname", value: "controller", target: "/etc/nova/nova.conf" }
-    - { index: "~/.executed-nova-04", group: "DEFAULT", key: "my_ip", value: "10.0.0.11", target: "/etc/nova/nova.conf" }
-    - { index: "~/.executed-nova-05", group: "DEFAULT", key: "vncserver_listen", value: "10.0.0.11", target: "/etc/nova/nova.conf" }
-    - { index: "~/.executed-nova-06", group: "DEFAULT", key: "vncserver_proxyclient_address", value: "10.0.0.11", target: "/etc/nova/nova.conf" }
-    - { index: "~/.executed-nova-07", group: "DEFAULT", key: "vnc_keymap", value: "ja", target: "/etc/nova/nova.conf" }
-    - { index: "~/.executed-nova-08", group: "DEFAULT", key: "auth_strategy", value: "keystone", target: "/etc/nova/nova.conf" }
-    - { index: "~/.executed-nova-09", group: "DEFAULT", key: "network_api_class", value: "nova.network.neutronv2.api.API", target: "/etc/nova/nova.conf" }
-    - { index: "~/.executed-nova-10", group: "DEFAULT", key: "neutron_url", value: "http://controller:9696", target: "/etc/nova/nova.conf" }
-    - { index: "~/.executed-nova-11", group: "DEFAULT", key: "neutron_auth_strategy", value: "keystone", target: "/etc/nova/nova.conf" }
-    - { index: "~/.executed-nova-12", group: "DEFAULT", key: "neutron_admin_tenant_name", value: "service", target: "/etc/nova/nova.conf" }
-    - { index: "~/.executed-nova-13", group: "DEFAULT", key: "neutron_admin_username", value: "neutron", target: "/etc/nova/nova.conf" }
-    - { index: "~/.executed-nova-14", group: "DEFAULT", key: "neutron_admin_password", value: "{{ NEUTRON_PASS }}", target: "/etc/nova/nova.conf" }
-    - { index: "~/.executed-nova-15", group: "DEFAULT", key: "neutron_admin_auth_url", value: "http://controller:35357/v2.0", target: "/etc/nova/nova.conf" }
-    - { index: "~/.executed-nova-16", group: "DEFAULT", key: "linuxnet_interface_driver", value: "nova.network.linux_net.LinuxOVSInterfaceDriver", target: "/etc/nova/nova.conf" }
-    - { index: "~/.executed-nova-17", group: "DEFAULT", key: "firewall_driver", value: "nova.virt.firewall.NoopFirewallDriver", target: "/etc/nova/nova.conf" }
-    - { index: "~/.executed-nova-18", group: "DEFAULT", key: "security_group_api", value: "neutron", target: "/etc/nova/nova.conf" }
-    - { index: "~/.executed-nova-19", group: "DEFAULT", key: "service_neutron_metadata_proxy", value: "true", target: "/etc/nova/nova.conf" }
-    - { index: "~/.executed-nova-20", group: "DEFAULT", key: "neutron_metadata_proxy_shared_secret", value: "{{ METADATA_SECRET }}", target: "/etc/nova/nova.conf" }
-    - { index: "~/.executed-nova-21", group: "keystone_authtoken", key: "auth_uri", value: "http://controller:5000", target: "/etc/nova/nova.conf" }
-    # - { index: "~/.executed-nova-10", group: "keystone_authtoken", key: "auth_host", value: "controller", target: "/etc/nova/nova.conf" }
-    # - { index: "~/.executed-nova-11", group: "keystone_authtoken", key: "auth_protocol", value: "http", target: "/etc/nova/nova.conf" }
-    # - { index: "~/.executed-nova-12", group: "keystone_authtoken", key: "auth_port", value: "35357", target: "/etc/nova/nova.conf" }
-    - { index: "~/.executed-nova-22", group: "keystone_authtoken", key: "identity_uri", value: "http://controller:35357", target: "/etc/nova/nova.conf" }
-    - { index: "~/.executed-nova-23", group: "keystone_authtoken", key: "admin_user", value: "nova", target: "/etc/nova/nova.conf" }
-    - { index: "~/.executed-nova-24", group: "keystone_authtoken", key: "admin_tenant_name", value: "service", target: "/etc/nova/nova.conf" }
-    - { index: "~/.executed-nova-25", group: "keystone_authtoken", key: "admin_password", value: "{{ NOVA_PASS }}", target: "/etc/nova/nova.conf" }
+    - { index: "~/.executed/nova-01", group: "database", key: "connection", value: "mysql://nova:{{ NOVA_DBPASS }}@controller/nova", target: "/etc/nova/nova.conf" }
+    - { index: "~/.executed/nova-02", group: "DEFAULT", key: "rpc_backend", value: "qpid", target: "/etc/nova/nova.conf" }
+    - { index: "~/.executed/nova-03", group: "DEFAULT", key: "qpid_hostname", value: "controller", target: "/etc/nova/nova.conf" }
+    - { index: "~/.executed/nova-04", group: "DEFAULT", key: "my_ip", value: "10.0.0.11", target: "/etc/nova/nova.conf" }
+    - { index: "~/.executed/nova-05", group: "DEFAULT", key: "vncserver_listen", value: "10.0.0.11", target: "/etc/nova/nova.conf" }
+    - { index: "~/.executed/nova-06", group: "DEFAULT", key: "vncserver_proxyclient_address", value: "10.0.0.11", target: "/etc/nova/nova.conf" }
+    - { index: "~/.executed/nova-07", group: "DEFAULT", key: "vnc_keymap", value: "ja", target: "/etc/nova/nova.conf" }
+    - { index: "~/.executed/nova-08", group: "DEFAULT", key: "auth_strategy", value: "keystone", target: "/etc/nova/nova.conf" }
+    - { index: "~/.executed/nova-09", group: "DEFAULT", key: "network_api_class", value: "nova.network.neutronv2.api.API", target: "/etc/nova/nova.conf" }
+    - { index: "~/.executed/nova-10", group: "DEFAULT", key: "neutron_url", value: "http://controller:9696", target: "/etc/nova/nova.conf" }
+    - { index: "~/.executed/nova-11", group: "DEFAULT", key: "neutron_auth_strategy", value: "keystone", target: "/etc/nova/nova.conf" }
+    - { index: "~/.executed/nova-12", group: "DEFAULT", key: "neutron_admin_tenant_name", value: "service", target: "/etc/nova/nova.conf" }
+    - { index: "~/.executed/nova-13", group: "DEFAULT", key: "neutron_admin_username", value: "neutron", target: "/etc/nova/nova.conf" }
+    - { index: "~/.executed/nova-14", group: "DEFAULT", key: "neutron_admin_password", value: "{{ NEUTRON_PASS }}", target: "/etc/nova/nova.conf" }
+    - { index: "~/.executed/nova-15", group: "DEFAULT", key: "neutron_admin_auth_url", value: "http://controller:35357/v2.0", target: "/etc/nova/nova.conf" }
+    - { index: "~/.executed/nova-16", group: "DEFAULT", key: "linuxnet_interface_driver", value: "nova.network.linux_net.LinuxOVSInterfaceDriver", target: "/etc/nova/nova.conf" }
+    - { index: "~/.executed/nova-17", group: "DEFAULT", key: "firewall_driver", value: "nova.virt.firewall.NoopFirewallDriver", target: "/etc/nova/nova.conf" }
+    - { index: "~/.executed/nova-18", group: "DEFAULT", key: "security_group_api", value: "neutron", target: "/etc/nova/nova.conf" }
+    - { index: "~/.executed/nova-19", group: "DEFAULT", key: "service_neutron_metadata_proxy", value: "true", target: "/etc/nova/nova.conf" }
+    - { index: "~/.executed/nova-20", group: "DEFAULT", key: "neutron_metadata_proxy_shared_secret", value: "{{ METADATA_SECRET }}", target: "/etc/nova/nova.conf" }
+    - { index: "~/.executed/nova-21", group: "keystone_authtoken", key: "auth_uri", value: "http://controller:5000", target: "/etc/nova/nova.conf" }
+    # - { index: "~/.executed/nova-10", group: "keystone_authtoken", key: "auth_host", value: "controller", target: "/etc/nova/nova.conf" }
+    # - { index: "~/.executed/nova-11", group: "keystone_authtoken", key: "auth_protocol", value: "http", target: "/etc/nova/nova.conf" }
+    # - { index: "~/.executed/nova-12", group: "keystone_authtoken", key: "auth_port", value: "35357", target: "/etc/nova/nova.conf" }
+    - { index: "~/.executed/nova-22", group: "keystone_authtoken", key: "identity_uri", value: "http://controller:35357", target: "/etc/nova/nova.conf" }
+    - { index: "~/.executed/nova-23", group: "keystone_authtoken", key: "admin_user", value: "nova", target: "/etc/nova/nova.conf" }
+    - { index: "~/.executed/nova-24", group: "keystone_authtoken", key: "admin_tenant_name", value: "service", target: "/etc/nova/nova.conf" }
+    - { index: "~/.executed/nova-25", group: "keystone_authtoken", key: "admin_password", value: "{{ NOVA_PASS }}", target: "/etc/nova/nova.conf" }
 
   tags: nova
 
 - shell: "{{ item.command }} && touch {{ item.index }} creates={{ item.index }}"
   with_items:
-    - { index: "~/.executed-nova-31", command: "su -s /bin/sh -c \"nova-manage db sync\" nova" }
+    - { index: "~/.executed/nova-31", command: "su -s /bin/sh -c \"nova-manage db sync\" nova" }
   tags: nova
 
 - service: name={{ item }} state=running enabled=yes

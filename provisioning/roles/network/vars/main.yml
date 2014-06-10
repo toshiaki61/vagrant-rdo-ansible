@@ -1,4 +1,4 @@
 ---
 INSTANCE_TUNNELS_INTERFACE_IP_ADDRESS: 10.0.10.21
 
-interface_name: eth3
+INTERFACE_NAME: eth3

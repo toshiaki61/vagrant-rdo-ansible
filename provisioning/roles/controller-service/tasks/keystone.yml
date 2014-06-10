@@ -6,51 +6,51 @@
 
 - shell: openstack-config --set {{ item.target }} {{ item.group }} {{ item.key }} {{ item.value }} && touch {{ item.index }} creates={{ item.index }}
   with_items:
-    - { index: "~/.executed-keystone-01", group: "database", key: "connection", value: "mysql://keystone:{{ KEYSTONE_DBPASS }}@controller/keystone", target: "/etc/keystone/keystone.conf" }
-    - { index: "~/.executed-keystone-02", group: "sql", key: "connection", value: "mysql://keystone:{{ KEYSTONE_DBPASS }}@controller/keystone", target: "/etc/keystone/keystone.conf" }
-    - { index: "~/.executed-keystone-03", group: "DEFAULT", key: "admin_token", value: "{{ ADMIN_TOKEN }}", target: "/etc/keystone/keystone.conf" }
+    - { index: "~/.executed/keystone-01", group: "database", key: "connection", value: "mysql://keystone:{{ KEYSTONE_DBPASS }}@controller/keystone", target: "/etc/keystone/keystone.conf" }
+    - { index: "~/.executed/keystone-02", group: "sql", key: "connection", value: "mysql://keystone:{{ KEYSTONE_DBPASS }}@controller/keystone", target: "/etc/keystone/keystone.conf" }
+    - { index: "~/.executed/keystone-03", group: "DEFAULT", key: "admin_token", value: "{{ ADMIN_TOKEN }}", target: "/etc/keystone/keystone.conf" }
   tags: keystone
 
 - shell: "{{ item.command }} && touch {{ item.index }} creates={{ item.index }}"
   with_items:
-    - { index: "~/.executed-keystone-11", command: "su -s /bin/sh -c \"keystone-manage db_sync\" keystone" }
-    - { index: "~/.executed-keystone-12", command: "keystone-manage pki_setup --keystone-user keystone --keystone-group keystone" }
-    - { index: "~/.executed-keystone-13", command: "chown -R keystone:keystone /etc/keystone/ssl" }
-    - { index: "~/.executed-keystone-14", command: "chown -R keystone:keystone /var/log/keystone" }
-    - { index: "~/.executed-keystone-15", command: "chmod -R o-rwx /etc/keystone/ssl" }
+    - { index: "~/.executed/keystone-11", command: "su -s /bin/sh -c \"keystone-manage db_sync\" keystone" }
+    - { index: "~/.executed/keystone-12", command: "keystone-manage pki_setup --keystone-user keystone --keystone-group keystone" }
+    - { index: "~/.executed/keystone-13", command: "chown -R keystone:keystone /etc/keystone/ssl" }
+    - { index: "~/.executed/keystone-14", command: "chown -R keystone:keystone /var/log/keystone" }
+    - { index: "~/.executed/keystone-15", command: "chmod -R o-rwx /etc/keystone/ssl" }
   tags: keystone
 
 - service: name=openstack-keystone state=running enabled=yes
   tags: keystone
 
-- copy: src=keystonerc dest=/tmp/keystonerc
+- copy: src=keystonerc dest=~/.tmp/keystonerc
   tags: keystone
 
 - shell: "{{ item.command }} && touch {{ item.index }} creates={{ item.index }}"
   with_items:
-    - { index: "~/.executed-keystone-21", command: "(sudo crontab -l 2>&1 | grep -q token_flush) || echo '@hourly /usr/bin/keystone-manage token_flush >/var/log/keystone/keystone-tokenflush.log 2>&1' | sudo tee -a /var/spool/cron/root" }
-    - { index: "~/.executed-keystone-22", command: "cat /tmp/keystonerc | sed 's/%KEYSTONE_USERNAME%/admin/g' | sed 's/%KEYSTONE_PASSWORD%/{{ ADMIN_PASS }}/g' | sudo tee keystonerc_admin" }
-    - { index: "~/.executed-keystone-23", command: "cat /tmp/keystonerc | sed 's/%KEYSTONE_USERNAME%/demo/g' | sed 's/%KEYSTONE_PASSWORD%/{{ DEMO_PASS }}/g' | sudo tee keystonerc_demo" }
+    - { index: "~/.executed/keystone-21", command: "(sudo crontab -l 2>&1 | grep -q token_flush) || echo '@hourly /usr/bin/keystone-manage token_flush >/var/log/keystone/keystone-tokenflush.log 2>&1' | sudo tee -a /var/spool/cron/root" }
+    - { index: "~/.executed/keystone-22", command: "cat ~/.tmp/keystonerc | sed 's/%KEYSTONE_USERNAME%/admin/g' | sed 's/%KEYSTONE_PASSWORD%/{{ ADMIN_PASS }}/g' | sudo tee keystonerc_admin" }
+    - { index: "~/.executed/keystone-23", command: "cat ~/.tmp/keystonerc | sed 's/%KEYSTONE_USERNAME%/demo/g' | sed 's/%KEYSTONE_PASSWORD%/{{ DEMO_PASS }}/g' | sudo tee keystonerc_demo" }
   tags: keystone
 
 - shell: "{{ item.command }} && touch {{ item.index }} creates={{ item.index }}"
   with_items:
-    - { index: "~/.executed-keystone-31", command: "keystone user-create --name=admin --pass={{ ADMIN_PASS }} --email={{ ADMIN_EMAIL }}" }
-    - { index: "~/.executed-keystone-32", command: "keystone role-create --name=admin" }
-    - { index: "~/.executed-keystone-33", command: "keystone tenant-create --name=admin --description=\"Admin Tenant\"" }
-    - { index: "~/.executed-keystone-34", command: "keystone user-role-add --user=admin --tenant=admin --role=admin" }
-    - { index: "~/.executed-keystone-35", command: "keystone user-role-add --user=admin --role=_member_ --tenant=admin" }
-    - { index: "~/.executed-keystone-36", command: "keystone tenant-create --name=service --description=\"Service Tenant\"" }
-    - { index: "~/.executed-keystone-37", command: "keystone service-create --name=keystone --type=identity --description=\"OpenStack Identity\"" }
-    - { index: "~/.executed-keystone-38", command: "keystone endpoint-create --service-id=$(keystone service-list | awk '/ identity / {print $2}') --publicurl=http://controller:5000/v2.0 --internalurl=http://controller:5000/v2.0 --adminurl=http://controller:35357/v2.0" }
+    - { index: "~/.executed/keystone-31", command: "keystone user-create --name=admin --pass={{ ADMIN_PASS }} --email={{ ADMIN_EMAIL }}" }
+    - { index: "~/.executed/keystone-32", command: "keystone role-create --name=admin" }
+    - { index: "~/.executed/keystone-33", command: "keystone tenant-create --name=admin --description=\"Admin Tenant\"" }
+    - { index: "~/.executed/keystone-34", command: "keystone user-role-add --user=admin --tenant=admin --role=admin" }
+    - { index: "~/.executed/keystone-35", command: "keystone user-role-add --user=admin --role=_member_ --tenant=admin" }
+    - { index: "~/.executed/keystone-36", command: "keystone tenant-create --name=service --description=\"Service Tenant\"" }
+    - { index: "~/.executed/keystone-37", command: "keystone service-create --name=keystone --type=identity --description=\"OpenStack Identity\"" }
+    - { index: "~/.executed/keystone-38", command: "keystone endpoint-create --service-id=$(keystone service-list | awk '/ identity / {print $2}') --publicurl=http://controller:5000/v2.0 --internalurl=http://controller:5000/v2.0 --adminurl=http://controller:35357/v2.0" }
   environment: SERVICE_TOKEN
   tags: keystone-configure
 
 - shell: "{{ item.command }} && touch {{ item.index }} creates={{ item.index }}"
   with_items:
-    - { index: "~/.executed-keystone-41", command: "keystone user-create --name=demo --pass={{ DEMO_PASS }} --email={{ DEMO_EMAIL }}" }
-    - { index: "~/.executed-keystone-42", command: "keystone tenant-create --name=demo --description=\"Demo Tenant\"" }
-    - { index: "~/.executed-keystone-43", command: "keystone user-role-add --user=demo --role=_member_ --tenant=demo" }
+    - { index: "~/.executed/keystone-41", command: "keystone user-create --name=demo --pass={{ DEMO_PASS }} --email={{ DEMO_EMAIL }}" }
+    - { index: "~/.executed/keystone-42", command: "keystone tenant-create --name=demo --description=\"Demo Tenant\"" }
+    - { index: "~/.executed/keystone-43", command: "keystone user-role-add --user=demo --role=_member_ --tenant=demo" }
   environment: SERVICE_TOKEN
   when: DEMO_CREATE
   tags: keystone-configure

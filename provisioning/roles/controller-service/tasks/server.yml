@@ -6,14 +6,14 @@
     - qpid-cpp-server
   tags: server
 
-- copy: src=my.cnf dest=/tmp/my.cnf
+- copy: src=my.cnf dest=~/.tmp/my.cnf
   tags: server
 
 - shell: "{{ item.command }} && touch {{ item.index }} creates={{ item.index }}"
   with_items:
-    - { index: "~/.executed-server-01", command: "cat /tmp/my.cnf | sudo tee -a /etc/my.cnf" }
-    - { index: "~/.executed-server-02", command: "sed -i 's/^auth=/#auth=/g' /etc/qpidd.conf" }
-    - { index: "~/.executed-server-03", command: "echo 'auth=no' | sudo tee -a /etc/qpidd.conf" }
+    - { index: "~/.executed/server-01", command: "cat ~/.tmp/my.cnf | sudo tee -a /etc/my.cnf" }
+    - { index: "~/.executed/server-02", command: "sed -i 's/^auth=/#auth=/g' /etc/qpidd.conf" }
+    - { index: "~/.executed/server-03", command: "echo 'auth=no' | sudo tee -a /etc/qpidd.conf" }
   tags: server
 
 - service: name={{ item }} state=running enabled=yes

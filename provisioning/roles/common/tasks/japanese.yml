@@ -1,12 +1,18 @@
 ---
+- file: state=directory path={{ item }}
+  with_items:
+    - "~/.executed"
+    - "~/.tmp"
+  tags: common
+
 - shell: "{{ item.command }} && touch {{ item.index }} creates={{ item.index }}"
   with_items:
-    - { index: "~/.executed-japanese-01", command: "yum groupinstall -y \"Japanese Support\"" }
-    - { index: "~/.executed-japanese-02", command: "localedef -f UTF-8 -i ja_JP ja_JP.utf8" }
-    - { index: "~/.executed-japanese-03", command: "sed -i 's/^/#/g' /etc/sysconfig/i18n" }
-    - { index: "~/.executed-japanese-04", command: "echo 'LANG=\"ja_JP.UTF-8\"' | sudo tee -a /etc/sysconfig/i18n" }
-    - { index: "~/.executed-japanese-04", command: "echo 'SYSFONT=\"latarcyrheb-sun16\"' | sudo tee -a /etc/sysconfig/i18n" }
-    - { index: "~/.executed-japanese-05", command: "cp /usr/share/zoneinfo/Japan /etc/localtime" }
-    - { index: "~/.executed-japanese-06", command: "sed -i 's/^ZONE/#ZONE/g' /etc/sysconfig/clock" }
-    - { index: "~/.executed-japanese-07", command: "echo 'ZONE=\"Asia/Tokyo\"' | sudo tee -a /etc/sysconfig/clock" }
-  tags: japanese
+    - { index: "~/.executed/common-01", command: "yum groupinstall -y \"Japanese Support\"" }
+    - { index: "~/.executed/common-02", command: "localedef -f UTF-8 -i ja_JP ja_JP.utf8" }
+    - { index: "~/.executed/common-03", command: "sed -i 's/^/#/g' /etc/sysconfig/i18n" }
+    - { index: "~/.executed/common-04", command: "echo 'LANG=\"ja_JP.UTF-8\"' | sudo tee -a /etc/sysconfig/i18n" }
+    - { index: "~/.executed/common-04", command: "echo 'SYSFONT=\"latarcyrheb-sun16\"' | sudo tee -a /etc/sysconfig/i18n" }
+    - { index: "~/.executed/common-05", command: "cp /usr/share/zoneinfo/Japan /etc/localtime" }
+    - { index: "~/.executed/common-06", command: "sed -i 's/^ZONE/#ZONE/g' /etc/sysconfig/clock" }
+    - { index: "~/.executed/common-07", command: "echo 'ZONE=\"Asia/Tokyo\"' | sudo tee -a /etc/sysconfig/clock" }
+  tags: common

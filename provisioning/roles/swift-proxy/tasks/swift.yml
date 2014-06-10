@@ -12,33 +12,33 @@
     - memcached
   tags: swift-proxy
 
-- copy: src=proxy-server.conf dest=/tmp/proxy-server.conf
+- copy: src=proxy-server.conf dest=~/.tmp/proxy-server.conf
   tags: swift-proxy
 
 - shell: "{{ item.command }} && touch {{ item.index }} creates={{ item.index }}"
   with_items:
-    - { index: "~/.executed-swift-proxy-11", command: "cat /tmp/proxy-server.conf | sed 's/%SWIFT_PASS%/{{ SWIFT_PASS }}/g' | sed 's/%PROXY_LOCAL_NET_IP%/{{ PROXY_LOCAL_NET_IP }}/g' | sudo tee /etc/swift/proxy-server.conf" }
+    - { index: "~/.executed/swift-proxy-11", command: "cat ~/.tmp/proxy-server.conf | sed 's/%SWIFT_PASS%/{{ SWIFT_PASS }}/g' | sed 's/%PROXY_LOCAL_NET_IP%/{{ PROXY_LOCAL_NET_IP }}/g' | sudo tee /etc/swift/proxy-server.conf" }
   tags: swift-proxy
 
 - shell: openstack-config --set {{ item.target }} {{ item.group }} {{ item.key }} {{ item.value }} && touch {{ item.index }} creates={{ item.index }}
   with_items:
-    - { index: "~/.executed-swift-proxy-21", group: "filter:ceilometer", key: "use", value: "egg:ceilometer#swift", target: "/etc/swift/proxy-server.conf" }
+    - { index: "~/.executed/swift-proxy-21", group: "filter:ceilometer", key: "use", value: "egg:ceilometer#swift", target: "/etc/swift/proxy-server.conf" }
   tags: swift-proxy
 
 - shell: "{{ item.command }} && touch {{ item.index }} creates={{ item.index }} chdir=/etc/swift"
   with_items:
-    - { index: "~/.executed-swift-proxy-31", command: "mkdir -p /etc/swift/keystone-signing && chown -R swift:swift /etc/swift/keystone-signing" }
-    - { index: "~/.executed-swift-proxy-32", command: "swift-ring-builder account.builder create 18 3 1 && swift-ring-builder container.builder create 18 3 1 && swift-ring-builder object.builder create 18 3 1" }
-    - { index: "~/.executed-swift-proxy-33", command: "swift-ring-builder account.builder add z{{ ZONE }}-{{ STORAGE_LOCAL_NET_IP }}:6002R{{ STORAGE_REPLICATION_NET_IP }}:6005/{{ DEVICE }} 100" }
-    - { index: "~/.executed-swift-proxy-34", command: "swift-ring-builder container.builder add z{{ ZONE }}-{{ STORAGE_LOCAL_NET_IP_1 }}:6001R{{ STORAGE_REPLICATION_NET_IP }}:6004/{{ DEVICE }} 100" }
-    - { index: "~/.executed-swift-proxy-35", command: "swift-ring-builder object.builder add z{{ ZONE }}-{{ STORAGE_LOCAL_NET_IP_1 }}:6000R{{ STORAGE_REPLICATION_NET_IP }}:6003/{{ DEVICE }} 100" }
-    - { index: "~/.executed-swift-proxy-36", command: "swift-ring-builder account.builder" }
-    - { index: "~/.executed-swift-proxy-37", command: "swift-ring-builder container.builder" }
-    - { index: "~/.executed-swift-proxy-38", command: "swift-ring-builder object.builder" }
-    - { index: "~/.executed-swift-proxy-39", command: "swift-ring-builder account.builder rebalance" }
-    - { index: "~/.executed-swift-proxy-40", command: "swift-ring-builder container.builder rebalance" }
-    - { index: "~/.executed-swift-proxy-41", command: "swift-ring-builder object.builder rebalance" }
-    - { index: "~/.executed-swift-proxy-42", command: "chown -R swift:swift /etc/swift" }
+    - { index: "~/.executed/swift-proxy-31", command: "mkdir -p /etc/swift/keystone-signing && chown -R swift:swift /etc/swift/keystone-signing" }
+    - { index: "~/.executed/swift-proxy-32", command: "swift-ring-builder account.builder create 18 3 1 && swift-ring-builder container.builder create 18 3 1 && swift-ring-builder object.builder create 18 3 1" }
+    - { index: "~/.executed/swift-proxy-33", command: "swift-ring-builder account.builder add z{{ ZONE }}-{{ STORAGE_LOCAL_NET_IP }}:6002R{{ STORAGE_REPLICATION_NET_IP }}:6005/{{ DEVICE }} 100" }
+    - { index: "~/.executed/swift-proxy-34", command: "swift-ring-builder container.builder add z{{ ZONE }}-{{ STORAGE_LOCAL_NET_IP_1 }}:6001R{{ STORAGE_REPLICATION_NET_IP }}:6004/{{ DEVICE }} 100" }
+    - { index: "~/.executed/swift-proxy-35", command: "swift-ring-builder object.builder add z{{ ZONE }}-{{ STORAGE_LOCAL_NET_IP_1 }}:6000R{{ STORAGE_REPLICATION_NET_IP }}:6003/{{ DEVICE }} 100" }
+    - { index: "~/.executed/swift-proxy-36", command: "swift-ring-builder account.builder" }
+    - { index: "~/.executed/swift-proxy-37", command: "swift-ring-builder container.builder" }
+    - { index: "~/.executed/swift-proxy-38", command: "swift-ring-builder object.builder" }
+    - { index: "~/.executed/swift-proxy-39", command: "swift-ring-builder account.builder rebalance" }
+    - { index: "~/.executed/swift-proxy-40", command: "swift-ring-builder container.builder rebalance" }
+    - { index: "~/.executed/swift-proxy-41", command: "swift-ring-builder object.builder rebalance" }
+    - { index: "~/.executed/swift-proxy-42", command: "chown -R swift:swift /etc/swift" }
   tags: ceilometer-storage
 
 - service: name={{ item }} state=running enabled=yes

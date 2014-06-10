@@ -8,41 +8,41 @@
 
 - shell: openstack-config --set {{ item.target }} {{ item.group }} {{ item.key }} {{ item.value }} && touch {{ item.index }} creates={{ item.index }}
   with_items:
-    - { index: "~/.executed-neutron-01", group: "database", key: "connection", value: "mysql://neutron:{{ NEUTRON_DBPASS }}@controller/neutron", target: "/etc/neutron/neutron.conf" }
-    - { index: "~/.executed-neutron-02", group: "DEFAULT", key: "auth_strategy", value: "keystone", target: "/etc/neutron/neutron.conf" }
-    - { index: "~/.executed-neutron-03", group: "keystone_authtoken", key: "auth_uri", value: "http://controller:5000", target: "/etc/neutron/neutron.conf" }
-    - { index: "~/.executed-neutron-03", group: "keystone_authtoken", key: "identity_uri", value: "http://controller:35357", target: "/etc/neutron/neutron.conf" }
-    # - { index: "~/.executed-neutron-04", group: "keystone_authtoken", key: "auth_host", value: "controller", target: "/etc/neutron/neutron.conf" }
-    # - { index: "~/.executed-neutron-05", group: "keystone_authtoken", key: "auth_protocol", value: "http", target: "/etc/neutron/neutron.conf" }
-    # - { index: "~/.executed-neutron-06", group: "keystone_authtoken", key: "auth_port", value: "35357", target: "/etc/neutron/neutron.conf" }
-    - { index: "~/.executed-neutron-07", group: "keystone_authtoken", key: "admin_tenant_name", value: "service", target: "/etc/neutron/neutron.conf" }
-    - { index: "~/.executed-neutron-08", group: "keystone_authtoken", key: "admin_user", value: "neutron", target: "/etc/neutron/neutron.conf" }
-    - { index: "~/.executed-neutron-09", group: "keystone_authtoken", key: "admin_password", value: "{{ NEUTRON_PASS }}", target: "/etc/neutron/neutron.conf" }
-    - { index: "~/.executed-neutron-10", group: "DEFAULT", key: "rpc_backend", value: "neutron.openstack.common.rpc.impl_qpid", target: "/etc/neutron/neutron.conf" }
-    - { index: "~/.executed-neutron-11", group: "DEFAULT", key: "qpid_hostname", value: "controller", target: "/etc/neutron/neutron.conf" }
-    - { index: "~/.executed-neutron-12", group: "DEFAULT", key: "notify_nova_on_port_status_changes", value: "True", target: "/etc/neutron/neutron.conf" }
-    - { index: "~/.executed-neutron-13", group: "DEFAULT", key: "notify_nova_on_port_data_changes", value: "True", target: "/etc/neutron/neutron.conf" }
-    - { index: "~/.executed-neutron-14", group: "DEFAULT", key: "nova_url", value: "http://controller:8774/v2", target: "/etc/neutron/neutron.conf" }
-    - { index: "~/.executed-neutron-15", group: "DEFAULT", key: "nova_admin_username", value: "nova", target: "/etc/neutron/neutron.conf" }
-    - { index: "~/.executed-neutron-16", group: "DEFAULT", key: "nova_admin_tenant_id", value: "$(keystone tenant-list | awk '/ service / { print $2 }')", target: "/etc/neutron/neutron.conf" }
-    - { index: "~/.executed-neutron-17", group: "DEFAULT", key: "nova_admin_password", value: "{{ NOVA_PASS }}", target: "/etc/neutron/neutron.conf" }
-    - { index: "~/.executed-neutron-18", group: "DEFAULT", key: "nova_admin_auth_url", value: "http://controller:35357/v2.0", target: "/etc/neutron/neutron.conf" }
-    - { index: "~/.executed-neutron-19", group: "DEFAULT", key: "core_plugin", value: "ml2", target: "/etc/neutron/neutron.conf" }
-    - { index: "~/.executed-neutron-20", group: "DEFAULT", key: "service_plugins", value: "router", target: "/etc/neutron/neutron.conf" }
-    - { index: "~/.executed-neutron-21", group: "DEFAULT", key: "verbose", value: "True", target: "/etc/neutron/neutron.conf" }
-    - { index: "~/.executed-neutron-22", group: "ml2", key: "type_drivers", value: "gre", target: "/etc/neutron/plugins/ml2/ml2_conf.ini" }
-    - { index: "~/.executed-neutron-23", group: "ml2", key: "tenant_network_types", value: "gre", target: "/etc/neutron/plugins/ml2/ml2_conf.ini" }
-    - { index: "~/.executed-neutron-24", group: "ml2", key: "mechanism_drivers", value: "openvswitch", target: "/etc/neutron/plugins/ml2/ml2_conf.ini" }
-    - { index: "~/.executed-neutron-25", group: "ml2_type_gre", key: "tunnel_id_ranges", value: "1:1000", target: "/etc/neutron/plugins/ml2/ml2_conf.ini" }
-    - { index: "~/.executed-neutron-26", group: "securitygroup", key: "firewall_driver", value: "neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver", target: "/etc/neutron/plugins/ml2/ml2_conf.ini" }
-    - { index: "~/.executed-neutron-27", group: "securitygroup", key: "enable_security_group", value: "True", target: "/etc/neutron/plugins/ml2/ml2_conf.ini" }
+    - { index: "~/.executed/neutron-01", group: "database", key: "connection", value: "mysql://neutron:{{ NEUTRON_DBPASS }}@controller/neutron", target: "/etc/neutron/neutron.conf" }
+    - { index: "~/.executed/neutron-02", group: "DEFAULT", key: "auth_strategy", value: "keystone", target: "/etc/neutron/neutron.conf" }
+    - { index: "~/.executed/neutron-03", group: "keystone_authtoken", key: "auth_uri", value: "http://controller:5000", target: "/etc/neutron/neutron.conf" }
+    - { index: "~/.executed/neutron-03", group: "keystone_authtoken", key: "identity_uri", value: "http://controller:35357", target: "/etc/neutron/neutron.conf" }
+    # - { index: "~/.executed/neutron-04", group: "keystone_authtoken", key: "auth_host", value: "controller", target: "/etc/neutron/neutron.conf" }
+    # - { index: "~/.executed/neutron-05", group: "keystone_authtoken", key: "auth_protocol", value: "http", target: "/etc/neutron/neutron.conf" }
+    # - { index: "~/.executed/neutron-06", group: "keystone_authtoken", key: "auth_port", value: "35357", target: "/etc/neutron/neutron.conf" }
+    - { index: "~/.executed/neutron-07", group: "keystone_authtoken", key: "admin_tenant_name", value: "service", target: "/etc/neutron/neutron.conf" }
+    - { index: "~/.executed/neutron-08", group: "keystone_authtoken", key: "admin_user", value: "neutron", target: "/etc/neutron/neutron.conf" }
+    - { index: "~/.executed/neutron-09", group: "keystone_authtoken", key: "admin_password", value: "{{ NEUTRON_PASS }}", target: "/etc/neutron/neutron.conf" }
+    - { index: "~/.executed/neutron-10", group: "DEFAULT", key: "rpc_backend", value: "neutron.openstack.common.rpc.impl_qpid", target: "/etc/neutron/neutron.conf" }
+    - { index: "~/.executed/neutron-11", group: "DEFAULT", key: "qpid_hostname", value: "controller", target: "/etc/neutron/neutron.conf" }
+    - { index: "~/.executed/neutron-12", group: "DEFAULT", key: "notify_nova_on_port_status_changes", value: "True", target: "/etc/neutron/neutron.conf" }
+    - { index: "~/.executed/neutron-13", group: "DEFAULT", key: "notify_nova_on_port_data_changes", value: "True", target: "/etc/neutron/neutron.conf" }
+    - { index: "~/.executed/neutron-14", group: "DEFAULT", key: "nova_url", value: "http://controller:8774/v2", target: "/etc/neutron/neutron.conf" }
+    - { index: "~/.executed/neutron-15", group: "DEFAULT", key: "nova_admin_username", value: "nova", target: "/etc/neutron/neutron.conf" }
+    - { index: "~/.executed/neutron-16", group: "DEFAULT", key: "nova_admin_tenant_id", value: "$(keystone tenant-list | awk '/ service / { print $2 }')", target: "/etc/neutron/neutron.conf" }
+    - { index: "~/.executed/neutron-17", group: "DEFAULT", key: "nova_admin_password", value: "{{ NOVA_PASS }}", target: "/etc/neutron/neutron.conf" }
+    - { index: "~/.executed/neutron-18", group: "DEFAULT", key: "nova_admin_auth_url", value: "http://controller:35357/v2.0", target: "/etc/neutron/neutron.conf" }
+    - { index: "~/.executed/neutron-19", group: "DEFAULT", key: "core_plugin", value: "ml2", target: "/etc/neutron/neutron.conf" }
+    - { index: "~/.executed/neutron-20", group: "DEFAULT", key: "service_plugins", value: "router", target: "/etc/neutron/neutron.conf" }
+    - { index: "~/.executed/neutron-21", group: "DEFAULT", key: "verbose", value: "True", target: "/etc/neutron/neutron.conf" }
+    - { index: "~/.executed/neutron-22", group: "ml2", key: "type_drivers", value: "gre", target: "/etc/neutron/plugins/ml2/ml2_conf.ini" }
+    - { index: "~/.executed/neutron-23", group: "ml2", key: "tenant_network_types", value: "gre", target: "/etc/neutron/plugins/ml2/ml2_conf.ini" }
+    - { index: "~/.executed/neutron-24", group: "ml2", key: "mechanism_drivers", value: "openvswitch", target: "/etc/neutron/plugins/ml2/ml2_conf.ini" }
+    - { index: "~/.executed/neutron-25", group: "ml2_type_gre", key: "tunnel_id_ranges", value: "1:1000", target: "/etc/neutron/plugins/ml2/ml2_conf.ini" }
+    - { index: "~/.executed/neutron-26", group: "securitygroup", key: "firewall_driver", value: "neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver", target: "/etc/neutron/plugins/ml2/ml2_conf.ini" }
+    - { index: "~/.executed/neutron-27", group: "securitygroup", key: "enable_security_group", value: "True", target: "/etc/neutron/plugins/ml2/ml2_conf.ini" }
   environment: ADMIN_OPENRC
   tags: neutron
 
 - shell: "{{ item.command }} && touch {{ item.index }} creates={{ item.index }}"
   with_items:
-    - { index: "~/.executed-neutron-31", command: "sed -i 's/^service_provider=/#service_provider=/g' /etc/neutron/neutron.conf" }
-    - { index: "~/.executed-neutron-32", command: "ln -s /etc/neutron/plugins/ml2/ml2_conf.ini /etc/neutron/plugin.ini" }
+    - { index: "~/.executed/neutron-31", command: "sed -i 's/^service_provider=/#service_provider=/g' /etc/neutron/neutron.conf" }
+    - { index: "~/.executed/neutron-32", command: "ln -s /etc/neutron/plugins/ml2/ml2_conf.ini /etc/neutron/plugin.ini" }
   tags: neutron
 
 - service: name={{ item }} state=running enabled=yes
@@ -55,17 +55,17 @@
 
 - shell: "{{ item.command }} && touch {{ item.index }} creates={{ item.index }}"
   with_items:
-    - { index: "~/.executed-network-41", command: "neutron net-create ext-net --shared --router:external=True" }
-    - { index: "~/.executed-network-42", command: "neutron subnet-create ext-net --name ext-subnet --allocation-pool start={{ FLOATING_IP_START }},end={{ FLOATING_IP_END }} --disable-dhcp --gateway {{ EXTERNAL_NETWORK_GATEWAY }} {{ EXTERNAL_NETWORK_CIDR }}" }
+    - { index: "~/.executed/network-41", command: "neutron net-create ext-net --shared --router:external=True" }
+    - { index: "~/.executed/network-42", command: "neutron subnet-create ext-net --name ext-subnet --allocation-pool start={{ FLOATING_IP_START }},end={{ FLOATING_IP_END }} --disable-dhcp --gateway {{ EXTERNAL_NETWORK_GATEWAY }} {{ EXTERNAL_NETWORK_CIDR }}" }
   environment: ADMIN_OPENRC
   tags: network
 
 - shell: "{{ item.command }} && touch {{ item.index }} creates={{ item.index }}"
   with_items:
-    - { index: "~/.executed-network-51", command: "neutron net-create demo-net" }
-    - { index: "~/.executed-network-52", command: "neutron subnet-create demo-net --name demo-subnet --gateway {{ TENANT_NETWORK_GATEWAY }} {{ TENANT_NETWORK_CIDR }}" }
-    - { index: "~/.executed-network-53", command: "neutron router-create demo-router" }
-    - { index: "~/.executed-network-54", command: "neutron router-interface-add demo-router demo-subnet" }
-    - { index: "~/.executed-network-55", command: "neutron router-gateway-set demo-router ext-net" }
+    - { index: "~/.executed/network-51", command: "neutron net-create demo-net" }
+    - { index: "~/.executed/network-52", command: "neutron subnet-create demo-net --name demo-subnet --gateway {{ TENANT_NETWORK_GATEWAY }} {{ TENANT_NETWORK_CIDR }}" }
+    - { index: "~/.executed/network-53", command: "neutron router-create demo-router" }
+    - { index: "~/.executed/network-54", command: "neutron router-interface-add demo-router demo-subnet" }
+    - { index: "~/.executed/network-55", command: "neutron router-gateway-set demo-router ext-net" }
   environment: DEMO_OPENRC
   tags: network

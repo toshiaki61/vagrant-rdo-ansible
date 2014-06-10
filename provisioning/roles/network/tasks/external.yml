@@ -1,11 +1,10 @@
 ---
-- copy: src=bridge dest=/tmp/bridge
+- copy: src=bridge dest=~/.tmp/bridge
   tags: external
 
 - shell: "{{ item.command }} && touch {{ item.index }} creates={{ item.index }}"
   with_items:
-    - { index: "~/.executed-external-01", command: "cat /tmp/bridge | sudo tee -a /etc/sysconfig/network-scripts/ifcfg-{{ interface_name }}" }
-    - { index: "~/.executed-external-02", command: "echo 'DEVICE={{ interface_name }}' | sudo tee -a /etc/sysconfig/network-scripts/ifcfg-{{ interface_name }}" }
+    - { index: "~/.executed/external-01", command: "cat ~/.tmp/bridge | sed 's/%INTERFACE_NAME%/{{ INTERFACE_NAME }}/g' | sudo tee /etc/sysconfig/network-scripts/ifcfg-{{ INTERFACE_NAME }}" }
   tags: external
 
 - service: name=network state=restarted

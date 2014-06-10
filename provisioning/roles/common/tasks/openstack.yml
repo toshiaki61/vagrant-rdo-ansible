@@ -1,10 +1,10 @@
 ---
-- copy: src=hosts dest=/tmp/hosts
+- copy: src=hosts dest=~/.tmp/hosts
   tags: openstack
 
 - shell: "{{ item.command }} && touch {{ item.index }} creates={{ item.index }}"
   with_items:
-    - { index: "~/.executed-openstack-01", command: "cat /tmp/hosts | sudo tee -a /etc/hosts" }
+    - { index: "~/.executed/openstack-01", command: "cat ~/.tmp/hosts | sudo tee -a /etc/hosts" }
   tags: openstack
 
 - yum: name={{ item }} state=present

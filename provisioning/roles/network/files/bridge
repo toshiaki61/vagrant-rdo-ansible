@@ -1,3 +1,4 @@
 TYPE=Ethernet
 ONBOOT="yes"
 BOOTPROTO="none"
+DEVICE=%INTERFACE_NAME%

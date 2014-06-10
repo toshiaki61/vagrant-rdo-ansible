@@ -6,22 +6,22 @@
 
 - shell: openstack-config --set {{ item.target }} {{ item.group }} {{ item.key }} {{ item.value }} && touch {{ item.index }} creates={{ item.index }}
   with_items:
-    - { index: "~/.executed-cinder-01", group: "database", key: "connection", value: "mysql://cinder:{{ CINDER_DBPASS }}@controller/cinder", target: "/etc/cinder/cinder.conf" }
-    - { index: "~/.executed-cinder-02", group: "DEFAULT", key: "auth_strategy", value: "keystone", target: "/etc/cinder/cinder.conf" }
-    - { index: "~/.executed-cinder-03", group: "DEFAULT", key: "rpc_backend", value: "cinder.openstack.common.rpc.impl_qpid", target: "/etc/cinder/cinder.conf" }
-    - { index: "~/.executed-cinder-04", group: "DEFAULT", key: "qpid_hostname", value: "controller", target: "/etc/cinder/cinder.conf" }
-    - { index: "~/.executed-cinder-05", group: "DEFAULT", key: "control_exchange", value: "cinder", target: "/etc/cinder/cinder.conf" }
-    - { index: "~/.executed-cinder-06", group: "DEFAULT", key: "notification_driver", value: "cinder.openstack.common.notifier.rpc_notifier", target: "/etc/cinder/cinder.conf" }
-    - { index: "~/.executed-cinder-07", group: "keystone_authtoken", key: "auth_uri", value: "http://controller:5000", target: "/etc/cinder/cinder.conf" }
-    - { index: "~/.executed-cinder-08", group: "keystone_authtoken", key: "identity_uri", value: "http://controller:35357", target: "/etc/cinder/cinder.conf" }
-    - { index: "~/.executed-cinder-09", group: "keystone_authtoken", key: "admin_user", value: "cinder", target: "/etc/cinder/cinder.conf" }
-    - { index: "~/.executed-cinder-10", group: "keystone_authtoken", key: "admin_tenant_name", value: "service", target: "/etc/cinder/cinder.conf" }
-    - { index: "~/.executed-cinder-11", group: "keystone_authtoken", key: "admin_password", value: "{{ CINDER_PASS }}", target: "/etc/cinder/cinder.conf" }
+    - { index: "~/.executed/cinder-01", group: "database", key: "connection", value: "mysql://cinder:{{ CINDER_DBPASS }}@controller/cinder", target: "/etc/cinder/cinder.conf" }
+    - { index: "~/.executed/cinder-02", group: "DEFAULT", key: "auth_strategy", value: "keystone", target: "/etc/cinder/cinder.conf" }
+    - { index: "~/.executed/cinder-03", group: "DEFAULT", key: "rpc_backend", value: "cinder.openstack.common.rpc.impl_qpid", target: "/etc/cinder/cinder.conf" }
+    - { index: "~/.executed/cinder-04", group: "DEFAULT", key: "qpid_hostname", value: "controller", target: "/etc/cinder/cinder.conf" }
+    - { index: "~/.executed/cinder-05", group: "DEFAULT", key: "control_exchange", value: "cinder", target: "/etc/cinder/cinder.conf" }
+    - { index: "~/.executed/cinder-06", group: "DEFAULT", key: "notification_driver", value: "cinder.openstack.common.notifier.rpc_notifier", target: "/etc/cinder/cinder.conf" }
+    - { index: "~/.executed/cinder-07", group: "keystone_authtoken", key: "auth_uri", value: "http://controller:5000", target: "/etc/cinder/cinder.conf" }
+    - { index: "~/.executed/cinder-08", group: "keystone_authtoken", key: "identity_uri", value: "http://controller:35357", target: "/etc/cinder/cinder.conf" }
+    - { index: "~/.executed/cinder-09", group: "keystone_authtoken", key: "admin_user", value: "cinder", target: "/etc/cinder/cinder.conf" }
+    - { index: "~/.executed/cinder-10", group: "keystone_authtoken", key: "admin_tenant_name", value: "service", target: "/etc/cinder/cinder.conf" }
+    - { index: "~/.executed/cinder-11", group: "keystone_authtoken", key: "admin_password", value: "{{ CINDER_PASS }}", target: "/etc/cinder/cinder.conf" }
   tags: cinder
 
 - shell: "{{ item.command }} && touch {{ item.index }} creates={{ item.index }}"
   with_items:
-    - { index: "~/.executed-cinder-21", command: "su -s /bin/sh -c \"cinder-manage db sync\" cinder" }
+    - { index: "~/.executed/cinder-21", command: "su -s /bin/sh -c \"cinder-manage db sync\" cinder" }
   tags: cinder
 
 - service: name={{ item }} state=running enabled=yes
