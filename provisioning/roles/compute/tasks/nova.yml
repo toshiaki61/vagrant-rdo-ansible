@@ -21,7 +21,7 @@
     - { index: "~/.executed/nova-13", group: "DEFAULT", key: "vnc_enabled", value: "True", target: "/etc/nova/nova.conf" }
     - { index: "~/.executed/nova-14", group: "DEFAULT", key: "vncserver_listen", value: "0.0.0.0", target: "/etc/nova/nova.conf" }
     - { index: "~/.executed/nova-15", group: "DEFAULT", key: "vncserver_proxyclient_address", value: "10.0.0.31", target: "/etc/nova/nova.conf" }
-    - { index: "~/.executed/nova-16", group: "DEFAULT", key: "novncproxy_base_url", value: "http://controller:6080/vnc_auto.html", target: "/etc/nova/nova.conf" }
+    - { index: "~/.executed/nova-16", group: "DEFAULT", key: "novncproxy_base_url", value: "http://10.0.0.11:6080/vnc_auto.html", target: "/etc/nova/nova.conf" }
     - { index: "~/.executed/nova-17", group: "DEFAULT", key: "glance_host", value: "controller", target: "/etc/nova/nova.conf" }
     - { index: "~/.executed/nova-18", group: "libvirt", key: "virt_type", value: "qemu", target: "/etc/nova/nova.conf" }
   tags: nova
