@@ -43,7 +43,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     box.vm.hostname = "network"
     box.vm.network :private_network, ip: "10.0.0.21", :netmask => "255.255.255.0"
     box.vm.network :private_network, ip: "10.0.10.21", :netmask => "255.255.255.0"
-    box.vm.network :private_network, ip: "203.0.113.1", :netmask => "255.255.255.0", :auto_config => false
+    box.vm.network :private_network, ip: "203.0.113.11", :netmask => "255.255.255.0", :auto_config => false
     box.vm.provider :virtualbox do |vbox|
       vbox.customize ["modifyvm", :id, "--memory", "512"]
       # eth3 must be in promiscuous mode for floating IPs to be accessible

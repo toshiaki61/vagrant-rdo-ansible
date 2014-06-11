@@ -9,3 +9,9 @@
     - ../roles/heat
     - ../roles/ceilometer-core
     - ../roles/trove-management
+  tasks:
+    - shell: "{{ item.command }} && touch {{ item.index }} creates={{ item.index }}"
+      with_items:
+        - { index: "~/.executed/swift-storage-41", command: "swift-init all restart" }
+      tags: swift-storage
+      

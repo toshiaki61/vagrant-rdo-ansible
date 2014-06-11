@@ -75,8 +75,8 @@
   with_items:
     - { index: "~/.executed/neutron-91", command: "ovs-vsctl add-br br-int" }
     - { index: "~/.executed/neutron-92", command: "ovs-vsctl add-br br-ex" }
-    - { index: "~/.executed/neutron-93", command: "ovs-vsctl add-port br-ex {{ interface_name }}" }
-    - { index: "~/.executed/neutron-94", command: "ethtool -K {{ interface_name }} gro off" }
+    - { index: "~/.executed/neutron-93", command: "ovs-vsctl add-port br-ex {{ INTERFACE_NAME }}" }
+    - { index: "~/.executed/neutron-94", command: "ethtool -K {{ INTERFACE_NAME }} gro off" }
     - { index: "~/.executed/neutron-95", command: "ln -s /etc/neutron/plugins/ml2/ml2_conf.ini /etc/neutron/plugin.ini" }
     - { index: "~/.executed/neutron-96", command: "cp /etc/init.d/neutron-openvswitch-agent /etc/init.d/neutron-openvswitch-agent.orig" }
     - { index: "~/.executed/neutron-97", command: "sed -i 's,plugins/openvswitch/ovs_neutron_plugin.ini,plugin.ini,g' /etc/init.d/neutron-openvswitch-agent" }
